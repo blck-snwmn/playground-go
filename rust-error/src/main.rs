@@ -28,6 +28,13 @@ fn main() {
     println!("========");
     println!("result={:?}", to_even_outer(10));
     println!("result={:?}", to_even_outer(11));
+
+    println!("========");
+    // SomethingError::Foo に変換されている
+    println!("result={:?}", switch_error_outer("foo"));
+    println!("result={:?}", switch_error_outer("bar"));
+    println!("result={:?}", switch_error_outer("baz"));
+    println!("result={:?}", switch_error_outer("_"));
 }
 
 fn can_open_outer() -> Result<()> {
@@ -65,4 +72,39 @@ fn to_even(v: u64) -> std::result::Result<u64, OddError> {
     } else {
         Err(OddError { input: v })
     }
+}
+
+fn switch_error_outer(s: &str) -> Result<()> {
+    switch_error(s)?;
+    Ok(())
+}
+fn switch_error(s: &str) -> std::result::Result<(), SomethingError> {
+    let e = match s {
+        // #[from] atribute によって、このfromが使えている
+        // #[from] がないとコンパイルエラー
+        "foo" => SomethingError::from(to_even(11).unwrap_err()),
+        "bar" => SomethingError::Bar(100),
+        "baz" => SomethingError::Baz {
+            baz1: "xxx".to_string(),
+            baz2: 15,
+        },
+        _ => SomethingError::No,
+    };
+    Err(e)
+}
+
+#[derive(Error, Debug)]
+enum SomethingError {
+    #[error("error! foo")]
+    Foo(#[from] OddError),
+    // #[from] は他のVariantが同じtypeのみから生成される場合
+    // コンパイルエラーになる
+    // #[error("error! foo2")]
+    // Foo2(#[from] OddError),
+    #[error("err:{0}")]
+    Bar(u32),
+    #[error("{baz1}-{baz2}")]
+    Baz { baz1: String, baz2: u32 },
+    #[error("err no")]
+    No,
 }
