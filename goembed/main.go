@@ -23,6 +23,7 @@ func main() {
 	fmt.Println(string(o))
 	o, _ = data.ReadFile("test.json")
 	fmt.Println(string(o))
+	// read no exsit file
 	_, err := data.ReadFile("testx.json")
 	fmt.Println(err)
 }
