@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option go_package = "./;main";
+
+package main;
+
+message SearchRequest {
+    enum RequestType {
+        AAAA = 0;
+        BBBB = 1;
+        CCCC = 2;
+    }
+
+  int32 page_number = 2;
+  repeated int64 packed_sample = 3 [packed=true];
+  sint32 result_per_page = 1000;
+  double test = 1;
+  string query = 4;
+  RequestType type = 6;
+  Inner inner_value = 7;
+}
+
+message Inner{
+    int32 inner_number = 1;
+}
