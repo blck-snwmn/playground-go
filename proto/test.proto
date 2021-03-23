@@ -22,4 +22,6 @@ message SearchRequest {
 
 message Inner{
     int32 inner_number = 1;
+    string inner_str = 2;
+    string tttttt = 3;
 }
