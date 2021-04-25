@@ -32,6 +32,7 @@ impl fmt::Pointer for SampleCopy {
 }
 fn main() {
     {
+        // move semantics
         let s1 = SampleMove { id: 10 };
         show!("s1", s1);
         let s2 = s1;
@@ -39,6 +40,7 @@ fn main() {
         show!("s2", s2); // change adress
     }
     {
+        // copy semantics
         let s1 = SampleCopy { id: 10 };
         show!("s1", s1);
         let s2 = s1;
