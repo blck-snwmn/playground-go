@@ -6,23 +6,31 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func do() {
-	// q := strings.Repeat("x", 2)
-	i := &Inner{
-		InnerNumber: 10,
+func show(r []byte) {
+	for _, rr := range r {
+		fmt.Printf("0b%08b, ", rr)
 	}
+	fmt.Println()
+}
+
+func do() {
+	// q := strings.Repeat("xあ", 3)
+	// i := &Inner{
+	// 	InnerNumber: 10,
+	// }
 	s := &SearchRequest{
-		// Query:         q,
-		// PageNumber:    3,
-		// ResultPerPage: 5234,
+		// Query:      q,
+		// PageNumber: 3,
+		ResultPerPage: -5234,
 		// PackedSample:  []int64{1, 2, 1000, 4, 5},
-		// Test:          1,
-		Type:       SearchRequest_BBBB,
-		InnerValue: i,
+		// Test: 1,
+		// Test32: 2,
+		// Type:       SearchRequest_BBBB,
+		// InnerValue: i,
 	}
 	r, err := proto.Marshal(s)
 	fmt.Println(err)
-	fmt.Printf("%d\n", r)
+	show(r)
 	// [16 1 34 1 120 192 62 2]
 	// 192=01000000
 	// 62=0111110
@@ -86,6 +94,37 @@ func doDuplicateField() {
 }
 
 func main() {
-	do()
-	doDuplicateField()
+	// do()
+	// doDuplicateField()
+	s := &SearchRequest{
+		PackedSample: []int64{
+			100000000,
+			// 2,
+			// 3,
+		},
+		// PackedSampleSigned: []int64{
+		// 	1,
+		// 	2,
+		// 	3,
+		// },
+		// PackedSampleUnsigned: []uint32{
+		// 	1,
+		// 	2,
+		// 	3,
+		// },
+		// Query: "あ",
+		// PageNumber: -10,
+	}
+	b, err := proto.Marshal(s)
+	if err != nil {
+		return
+	}
+	show(b)
+	// 0b00011010, 0b00000011, 0b00000001, 0b00000010, 0b00000011,
+	// 0b00100010, 0b00000011, 0b01100001, 0b01100010, 0b01100011,
+	// 0b01001010, 0b00000011, 0b00000010, 0b00000100, 0b00000110,
+	// 0b01010010, 0b00000011, 0b00000001, 0b00000010, 0b00000011,
+
+	//  , , ,
+	// 00101111101011110000100000000
 }
