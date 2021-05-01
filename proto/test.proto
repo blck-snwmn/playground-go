@@ -11,16 +11,25 @@ message SearchRequest {
         CCCC = 2;
     }
 
-  repeated int64 packed_sample = 3 [packed=true];
-  repeated sint64 packed_sample_signed = 9 [packed=true];
-  repeated uint32 packed_sample_unsigned = 10 [packed=true];
-  sint32 result_per_page = 1000;
-  int32 test = 1;
-  sint64 page_number = 2;
-  float test32 = 8;
-  string query = 4;
-  RequestType type = 6;
-  Inner inner_value = 7;
+  uint32 u_int32 = 1;
+  uint64 u_int64 = 2;
+  sint32 s_int32 = 3;
+  sint64 s_int64 = 4;
+  int32 i_int32 = 5;
+  int64 i_int64 = 6;
+  bool b_bool = 7;
+  
+  fixed64 f_fixed64 = 8; 
+  sfixed64 s_sfixed64 = 9;
+  double d_double = 10;
+  
+  repeated uint32 r_u_int32 = 101;
+  repeated uint64 r_u_int64 = 102;
+  repeated sint32 r_s_int32 = 103;
+  repeated sint64 r_s_int64 = 104;
+  repeated int32 r_i_int32 = 105;
+  repeated int64 r_i_int64 = 106;
+  repeated bool r_b_bool = 107;
 }
 
 message Inner{
