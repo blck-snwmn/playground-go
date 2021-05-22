@@ -96,23 +96,43 @@ func show(r []byte) {
 func main() {
 	// do()
 	// doDuplicateField()
+	i := Inner{
+		IInt32:    10,
+		SString:   "hello",
+		SInt64:    -4555,
+		FFixed64:  567,
+		SSfixed32: -100,
+	}
 	s := &SearchRequest{
-		UInt32:    1,
-		UInt64:    100,
-		SInt32:    122,
-		SInt64:    56789,
-		IInt32:    6423,
-		IInt64:    234242,
-		BBool:     true,
-		FFixed64:  443,
-		SSfixed64: 677,
-		DDouble:   1.25,
+		UInt32:     1,
+		UInt64:     100,
+		SInt32:     -122,
+		SInt64:     -56789,
+		IInt32:     -6423,
+		IInt64:     234242,
+		BBool:      true,
+		EEnumSamle: SearchRequest_EnumSamle(1),
+		FFixed64:   443,
+		SSfixed64:  -677,
+		DDouble:    1.25,
+		SString:    "fsde",
+		IInner:     &i,
+		BBytes:     []byte{4, 5, 6, 7},
+		FFixed32:   43,
+		SSfixed32:  1056,
+		FFloat:     3.211,
+		RUInt32:    []uint32{10, 20, 30},
 	}
 	b, err := proto.Marshal(s)
 	if err != nil {
 		return
 	}
 	show(b)
+	// fmt.Println(b)
+	// err = proto.Unmarshal([]byte{64, 2}, s)
+	// fmt.Println(err)
+	// fmt.Println(s)
+
 	// bool の値チェック。0じゃなければtrue
 	// err = proto.Unmarshal([]byte{0b01101000, 0b00000011}, s)
 	// if err != nil {

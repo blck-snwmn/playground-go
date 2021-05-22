@@ -5,35 +5,46 @@ option go_package = "./;main";
 package main;
 
 message SearchRequest {
-    enum RequestType {
-        AAAA = 0;
-        BBBB = 1;
-        CCCC = 2;
+    enum EnumSamle {
+        Value1 = 0;
+        Value2 = 1;
+        Value3 = 2;
     }
 
-  uint32 u_int32 = 1;
-  uint64 u_int64 = 2;
-  sint32 s_int32 = 3;
-  sint64 s_int64 = 4;
-  int32 i_int32 = 5;
-  int64 i_int64 = 6;
-  bool b_bool = 7;
-  
-  fixed64 f_fixed64 = 8; 
-  sfixed64 s_sfixed64 = 9;
-  double d_double = 10;
-  
-  repeated uint32 r_u_int32 = 101;
-  repeated uint64 r_u_int64 = 102;
-  repeated sint32 r_s_int32 = 103;
-  repeated sint64 r_s_int64 = 104;
-  repeated int32 r_i_int32 = 105;
-  repeated int64 r_i_int64 = 106;
-  repeated bool r_b_bool = 107;
+    uint32 u_int32 = 1;
+    uint64 u_int64 = 2;
+    sint32 s_int32 = 3;
+    sint64 s_int64 = 4;
+    int32 i_int32 = 5;
+    int64 i_int64 = 6;
+    bool b_bool = 7;
+    EnumSamle e_enum_samle = 8;
+
+    fixed64 f_fixed64 = 9; 
+    sfixed64 s_sfixed64 = 10;
+    double d_double = 11;
+
+    string s_string = 12;
+    bytes b_bytes = 13;
+    Inner i_inner = 14;
+
+    fixed32 f_fixed32 = 16; 
+    sfixed32 s_sfixed32 = 17;
+    float f_float = 18;
+
+    repeated uint32 r_u_int32 = 101;
+    repeated uint64 r_u_int64 = 102;
+    repeated sint32 r_s_int32 = 103;
+    repeated sint64 r_s_int64 = 104;
+    repeated int32 r_i_int32 = 105;
+    repeated int64 r_i_int64 = 106;
+    repeated bool r_b_bool = 107;
 }
 
 message Inner{
-    int32 inner_number = 1;
-    string inner_str = 2;
-    string tttttt = 3;
+    int32 i_int32 = 1;
+    string s_string = 2;
+    sint64 s_int64 = 3;
+    fixed64 f_fixed64 = 4;
+    sfixed32 s_sfixed32 = 5;
 }
