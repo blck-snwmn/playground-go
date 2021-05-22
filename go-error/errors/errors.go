@@ -1,20 +1,27 @@
 package errors
 
-import "fmt"
+import (
+	"fmt"
+
+	"golang.org/x/xerrors"
+)
 
 // ParentError ...
 type ParentError interface {
 	error
-	mustInpml()
+	Description() string
 }
 
 var _ ParentError = (*InvalidInputError)(nil)
 
 func (iie *InvalidInputError) Error() string {
-	return fmt.Sprintf("input=%s: %s", iie.input, iie.errMsg)
+	return iie.Description()
 }
 
-func (*InvalidInputError) mustInpml() {}
+// Description ...
+func (iie *InvalidInputError) Description() string {
+	return fmt.Sprintf("input=%s: %s", iie.input, iie.errMsg)
+}
 
 // InvalidInputError ...
 type InvalidInputError struct {
@@ -25,12 +32,32 @@ type InvalidInputError struct {
 var _ ParentError = (*SystemError)(nil)
 
 func (se *SystemError) Error() string {
-	return fmt.Sprintf("%d: system error", se.code)
+	return se.Description()
 }
 
-func (*SystemError) mustInpml() {}
+// Description ...
+func (se *SystemError) Description() string {
+	return fmt.Sprintf("%d: system error", se.code)
+}
 
 // SystemError ...
 type SystemError struct {
 	code uint64
+}
+
+// ErrorDescription return error code and description
+func ErrorDescription(err error) (uint64, string) {
+	if err == nil {
+		return 0, ""
+	}
+	var pe ParentError
+	if xerrors.As(err, &pe) {
+		switch e := pe.(type) {
+		case *InvalidInputError:
+			return 12, e.Description()
+		case *SystemError:
+			return 55, e.Description()
+		}
+	}
+	return 99, "unexpected error"
 }
