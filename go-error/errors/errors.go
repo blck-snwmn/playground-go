@@ -45,6 +45,12 @@ type SystemError struct {
 	code uint64
 }
 
+type ValidateError struct {
+	input          string
+	validationName string
+	errMsg         string
+}
+
 // ErrorDescription return error code and description
 func ErrorDescription(err error) (uint64, string) {
 	if err == nil {
@@ -58,6 +64,24 @@ func ErrorDescription(err error) (uint64, string) {
 		case *SystemError:
 			return 55, e.Description()
 		}
+	}
+	return 99, "unexpected error"
+}
+
+// ErrorDescription return error code and description
+func ErrorDescription2(err error) (uint64, string) {
+	if err == nil {
+		return 0, ""
+	}
+	var (
+		iie = &InvalidInputError{}
+		se  = &SystemError{}
+	)
+	if xerrors.As(err, &iie) {
+		return 12, iie.Description()
+	}
+	if xerrors.As(err, &se) {
+		return 55, se.Description()
 	}
 	return 99, "unexpected error"
 }

@@ -146,6 +146,78 @@ func TestErrorDescription(t *testing.T) {
 	}
 }
 
+func TestErrorDescription2(t *testing.T) {
+	type args struct {
+		err error
+	}
+	tests := []struct {
+		name  string
+		args  args
+		want  uint64
+		want1 string
+	}{
+		{
+			name: "nil is return 0 & no description",
+			args: args{
+				err: nil,
+			},
+			want:  0,
+			want1: "",
+		},
+		{
+			name: "InvalidInputError is return 12 & own's description",
+			args: args{
+				err: &InvalidInputError{input: "xxx", errMsg: "unsuport"},
+			},
+			want:  12,
+			want1: "input=xxx: unsuport",
+		},
+		{
+			name: "InvalidInputError is return 55 & own's description",
+			args: args{
+				err: &SystemError{code: 1002},
+			},
+			want:  55,
+			want1: "1002: system error",
+		},
+		{
+			name: "wrapped InvalidInputError is return 55 & own's description",
+			args: args{
+				err: xerrors.Errorf("wrap: %w", &SystemError{code: 1002}),
+			},
+			want:  55,
+			want1: "1002: system error",
+		},
+		{
+			name: "undefined ParentError is return 99 & common description",
+			args: args{
+				err: &testError{},
+			},
+			want:  99,
+			want1: "unexpected error",
+		},
+		{
+			name: "undefined erro is return 99 & common description",
+			args: args{
+				err: xerrors.New("test"),
+			},
+			want:  99,
+			want1: "unexpected error",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, got1 := ErrorDescription2(tt.args.err)
+			if got != tt.want {
+				t.Errorf("ErrorDescription() got = %v, want %v", got, tt.want)
+			}
+			if got1 != tt.want1 {
+				t.Errorf("ErrorDescription() got1 = %v, want %v", got1, tt.want1)
+			}
+		})
+	}
+}
+
 type testError struct {
 }
 
