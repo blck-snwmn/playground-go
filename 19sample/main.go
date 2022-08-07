@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sync/atomic"
 	"time"
 )
 
@@ -14,6 +15,20 @@ func sampleTime() {
 	}
 }
 
+func sampleAtmic() {
+	var i uint64
+	atomic.AddUint64(&i, 100)
+	fmt.Println(atomic.LoadUint64(&i))
+
+	var ii atomic.Uint64
+	// use atomic.AddUint64 in Add method
+	ii.Add(101)
+	fmt.Println(ii.Load())
+	ii.Add(2)
+	fmt.Println(ii.Load())
+}
+
 func main() {
 	sampleTime()
+	sampleAtmic()
 }
