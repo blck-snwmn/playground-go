@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sort"
 	"sync/atomic"
 	"time"
 )
@@ -28,7 +29,39 @@ func sampleAtmic() {
 	fmt.Println(ii.Load())
 }
 
+func sampleSort() {
+	input := []string{"aaa", "abc", "acb", "xxx"}
+
+	for _, target := range []string{"abc", "xxa"} {
+		fmt.Printf("-----\nsearch word is %q\n", target)
+		fi, ok := sort.Find(len(input), func(i int) int {
+			ii := input[i]
+			if target == ii {
+				return 0
+			}
+			if target < ii {
+				return -1
+			}
+			return +1
+		})
+		fmt.Println(fi, ok)
+
+		si := sort.Search(len(input), func(i int) bool {
+			return input[i] >= target
+		})
+		fmt.Println(si)
+	}
+}
+
+func wrapper(delimiter string, f func()) {
+	const template = "[%s:%s]================\n"
+	fmt.Printf(template, delimiter, "start")
+	defer fmt.Printf(template, delimiter, "end")
+	f()
+}
+
 func main() {
-	sampleTime()
-	sampleAtmic()
+	wrapper("time", sampleTime)
+	wrapper("atomic", sampleAtmic)
+	wrapper("sort", sampleSort)
 }
