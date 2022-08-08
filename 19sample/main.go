@@ -53,6 +53,15 @@ func sampleSort() {
 	}
 }
 
+func sampleFmtAppend() {
+	s := "aaaaa"
+	b := []byte(s)
+	b = fmt.Append(b, "bbb", "c")
+	b = fmt.Appendf(b, "zzzz%d", 1)
+
+	fmt.Println(string(b))
+}
+
 func wrapper(delimiter string, f func()) {
 	const template = "[%s:%s]================\n"
 	fmt.Printf(template, delimiter, "start")
@@ -64,4 +73,5 @@ func main() {
 	wrapper("time", sampleTime)
 	wrapper("atomic", sampleAtmic)
 	wrapper("sort", sampleSort)
+	wrapper("fmt.append", sampleFmtAppend)
 }
