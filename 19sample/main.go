@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/url"
 	"sort"
 	"sync/atomic"
 	"time"
@@ -66,6 +67,27 @@ func sampleFmtAppend() {
 	fmt.Println(string(b))
 }
 
+func sampleJoinPath() {
+	endpoint := "https://example.com"
+	endpoint, err := url.JoinPath(endpoint, "aaaa", "bbb")
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(endpoint)
+
+	endpoint, err = url.JoinPath(endpoint, "..", "..", "ccc")
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(endpoint)
+
+	endpoint, err = url.JoinPath(endpoint, "ddd", "..", "eee")
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(endpoint)
+}
+
 func wrapper(delimiter string, f func()) {
 	const template = "[%s:%s]================\n"
 	fmt.Printf(template, delimiter, "start")
@@ -78,4 +100,5 @@ func main() {
 	wrapper("atomic", sampleAtmic)
 	wrapper("sort", sampleSort)
 	wrapper("fmt.append", sampleFmtAppend)
+	wrapper("url.join_path", sampleJoinPath)
 }
