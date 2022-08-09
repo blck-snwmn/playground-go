@@ -30,11 +30,13 @@ func sampleAtmic() {
 }
 
 func sampleSort() {
-	input := []string{"aaa", "abc", "acb", "xxx"}
+	input := []string{"aaa", "aaa", "aaa", "abc", "acb", "acb", "xxx"}
 
 	for _, target := range []string{"abc", "xxa"} {
 		fmt.Printf("-----\nsearch word is %q\n", target)
+		fmt.Println("find start")
 		fi, ok := sort.Find(len(input), func(i int) int {
+			fmt.Printf("\tindex is %d\n", i)
 			ii := input[i]
 			if target == ii {
 				return 0
@@ -42,14 +44,16 @@ func sampleSort() {
 			if target < ii {
 				return -1
 			}
-			return +1
+			return 1
 		})
-		fmt.Println(fi, ok)
+		fmt.Println("find:", fi, ok)
 
+		fmt.Println("serch start")
 		si := sort.Search(len(input), func(i int) bool {
+			fmt.Printf("\tindex is %d\n", i)
 			return input[i] >= target
 		})
-		fmt.Println(si)
+		fmt.Println("serch:", si)
 	}
 }
 
