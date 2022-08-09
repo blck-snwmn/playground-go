@@ -1,9 +1,14 @@
 package main
 
 import (
+	"encoding"
+	"errors"
+	"flag"
 	"fmt"
 	"net/url"
 	"sort"
+	"strconv"
+	"strings"
 	"sync/atomic"
 	"time"
 )
@@ -95,10 +100,57 @@ func wrapper(delimiter string, f func()) {
 	f()
 }
 
+type input struct {
+	id   int
+	name string
+}
+
+// MarshalText implements encoding.TextMarshaler
+func (i *input) MarshalText() (text []byte, err error) {
+	return []byte(fmt.Sprintf("name-%s:id=%d", i.name, i.id)), nil
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler
+func (i *input) UnmarshalText(text []byte) error {
+	texts := strings.Split(string(text), ":")
+	if len(texts) != 2 {
+		return errors.New("invalid input text")
+	}
+	for _, t := range texts {
+		kv := strings.Split(t, "-")
+		if len(kv) != 2 {
+			return fmt.Errorf("unexpected format: %s", t)
+		}
+		switch kv[0] {
+		case "id":
+			var err error
+			i.id, err = strconv.Atoi(kv[1])
+			if err != nil {
+				return err
+			}
+		case "name":
+			i.name = kv[1]
+		default:
+			return fmt.Errorf("unexpected key name: %s", kv[0])
+		}
+	}
+	return nil
+}
+
+var _ encoding.TextUnmarshaler = (*input)(nil)
+var _ encoding.TextMarshaler = (*input)(nil)
+
 func main() {
+	var i input
+	flag.TextVar(&i, "input", &input{10, "x"}, "test")
+	flag.Parse()
+	wrapper("text marshal", func() {
+		fmt.Printf("%#v\n", i)
+	})
 	wrapper("time", sampleTime)
 	wrapper("atomic", sampleAtmic)
 	wrapper("sort", sampleSort)
 	wrapper("fmt.append", sampleFmtAppend)
 	wrapper("url.join_path", sampleJoinPath)
+
 }
