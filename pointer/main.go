@@ -16,6 +16,20 @@ type B struct {
 	c int32
 }
 
+func (*B) do() {}
+
+type C struct {
+	f func()
+}
+
+func (c *C) do() {
+	c.f()
+}
+
+type I interface {
+	do()
+}
+
 func main() {
 	a := A{10, 20, 30}
 	fmt.Printf("[A]struct adress is %p\n", &a)
@@ -33,4 +47,30 @@ func main() {
 	// size
 	fmt.Printf("[B]field a size is %d\n", uintptr(unsafe.Pointer(&a.b))-uintptr(unsafe.Pointer(&a.a)))
 	fmt.Printf("[B]field b size is %d\n", uintptr(unsafe.Pointer(&a.c))-uintptr(unsafe.Pointer(&a.b)))
+
+	var i I = b
+	fmt.Printf("%p\n", &i)
+	fmt.Printf("%p\n", i.do)
+
+	var f = i.do
+	fmt.Printf("%p\n", f)
+
+	fmt.Println("====")
+	var c = &C{func() {}}
+	var ii I = c
+	fmt.Printf("c.f=%p\n", c.f)
+	fmt.Printf("c.do=%p\n", c.do)
+	fmt.Printf("ii.do%p\n", ii.do)
+
+	c.f = func() {
+		fmt.Println("a")
+	}
+	fmt.Printf("c.f==\t%p\n", c.f)
+	fmt.Printf("c.do==\t%p\n", c.do)
+	fmt.Printf("ii.do=\t%p\n", ii.do)
+	fmt.Printf("ii.do(*C)=\t%p\n", ii.(*C).do)
+
+	fmt.Printf("c=\t%p\n", c)
+	fmt.Printf("ii=\t%p\n", ii)
+	fmt.Printf("ii.*C=\t%p\n", ii.(*C))
 }
