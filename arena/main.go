@@ -14,6 +14,7 @@ type Elm[T any] struct {
 }
 
 func main() {
+	// see: https://github.com/golang/go/blob/release-branch.go1.20/src/arena/arena.go
 	a := arena.NewArena()
 	defer a.Free()
 	{
