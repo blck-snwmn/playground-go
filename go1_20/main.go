@@ -38,21 +38,21 @@ func main() {
 		err3 := xerrors.New("error3")
 		errj := errors.Join(err1, err2, err3)
 
-		fmt.Println(errj)
-		fmt.Printf("%+v\n", errj) // no stacktrace. join call error's Error method
+		fmt.Println("errj: ", errj)
+		fmt.Printf("errj: %+v\n", errj) // no stacktrace. join call error's Error method
 		fmt.Println(errors.Is(errj, err1))
 		fmt.Println(errors.Is(errj, err2))
 		fmt.Println(errors.Is(errj, err3))
 
 		errc := multierr.Combine(err1, err2, err3) // with stacktrace
-		fmt.Printf("%+v\n", errc)
+		fmt.Printf("multierr: %+v\n", errc)
 	}
 	// fmt
 	{
 		err1 := errors.New("first_error")
 		err2 := errors.New("second_error")
 		merr := fmt.Errorf("first err is %w, second err is %w", err1, err2)
-		fmt.Println(merr)
+		fmt.Println("merr: ", merr)
 		fmt.Println(errors.Is(merr, err1))
 		fmt.Println(errors.Is(merr, err2))
 	}
