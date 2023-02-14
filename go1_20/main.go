@@ -4,7 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"go.uber.org/multierr"
@@ -69,4 +71,34 @@ func main() {
 	fmt.Println(n.Format(time.TimeOnly))
 
 	fmt.Println(time.Now().Compare(n)) // 1
+
+	// detect loop variabe capture by `go vet`
+	{
+		var sg sync.WaitGroup
+		for i := 0; i < 10; i++ {
+			sg.Add(1)
+			go func() {
+				x := i
+				fmt.Println(x)
+				defer sg.Done()
+			}()
+		}
+		sg.Wait()
+	}
+	{
+		var sg sync.WaitGroup
+		for i, e := range []string{"a", "b", "c", "3"} {
+			sg.Add(1)
+			go func() {
+				switch e {
+				case strconv.Itoa(i):
+					fmt.Println(i, e)
+				}
+				fmt.Println(e)
+				defer sg.Done()
+			}()
+		}
+		sg.Wait()
+	}
+
 }
