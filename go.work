@@ -1,6 +1,7 @@
 go 1.20
 
 use (
+	./benchcmp
 	./copybyte
 	./go1_20
 )

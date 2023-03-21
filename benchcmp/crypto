@@ -1,0 +1,8 @@
+goos: linux
+goarch: amd64
+pkg: github.com/blck-snwmn/playground-go/benchcmp
+cpu: 11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz
+BenchmarkSample-16     	 1331283	       890.3 ns/op	     112 B/op	       1 allocs/op
+BenchmarkSample2-16    	  279898	      4097 ns/op	    1024 B/op	       1 allocs/op
+PASS
+ok  	github.com/blck-snwmn/playground-go/benchcmp	3.299s
