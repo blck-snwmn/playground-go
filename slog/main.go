@@ -12,7 +12,7 @@ func main() {
 	l.Info("use json handler", slog.Bool("boolkey", true))
 	slog.Info("before SetDefault", slog.Bool("boolkey", true))
 
-	slog.SetDefault(l)
+	slog.SetDefault(l.With(slog.String("withkey", "withvalue")))
 
 	slog.Info("info log",
 		slog.Int("intkey", 12),
