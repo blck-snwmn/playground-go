@@ -7,8 +7,13 @@ import (
 )
 
 func main() {
-	l := slog.NewJSONHandler(os.Stdout)
-	slog.SetDefault(slog.New(l))
+	l := slog.New(slog.NewJSONHandler(os.Stdout))
+	// l := slog.NewJSONHandler(os.Stdout)
+	l.Info("use json handler", slog.Bool("boolkey", true))
+	slog.Info("before SetDefault", slog.Bool("boolkey", true))
+
+	slog.SetDefault(l)
+
 	slog.Info("info log",
 		slog.Int("intkey", 12),
 		slog.Group("group",
@@ -16,4 +21,5 @@ func main() {
 			slog.String("key string", "s2"),
 		),
 	)
+
 }

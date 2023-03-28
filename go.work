@@ -4,4 +4,5 @@ use (
 	./benchcmp
 	./copybyte
 	./go1_20
+	./slog
 )
