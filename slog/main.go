@@ -21,5 +21,6 @@ func main() {
 			slog.String("key string", "s2"),
 		),
 	)
-
+	slog.Error("error")
+	slog.Warn("warn")
 }
