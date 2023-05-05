@@ -23,4 +23,5 @@ func main() {
 	)
 	slog.Error("error")
 	slog.Warn("warn")
+
 }
