@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	l := slog.New(slog.HandlerOptions{AddSource: true}.NewJSONHandler(os.Stdout))
+	l := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{AddSource: true}))
 	// l := slog.NewJSONHandler(os.Stdout)
 	l.Info("use json handler", slog.Bool("boolkey", true))
 	slog.Info("before SetDefault", slog.Bool("boolkey", true))
