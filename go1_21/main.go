@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"cmp"
 	"fmt"
 	"log/slog"
@@ -8,10 +9,13 @@ import (
 	"os"
 	"slices"
 	"sort"
+	"strings"
 )
 
 func main() {
-	{ // log/slog
+	{
+		// log/slog
+		fmt.Println("===========log/slog===========")
 		l := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{AddSource: true}))
 
 		l.Info("use json handler", slog.Bool("boolkey", true))
@@ -23,12 +27,14 @@ func main() {
 	}
 	{
 		// cmp
+		fmt.Println("===========cmp===========")
 		fmt.Printf("1 cmp 2%d\n", cmp.Compare(1, 2))
 		fmt.Printf("1 cmp 1%d\n", cmp.Compare(1, 1))
 		fmt.Printf("3 cmp 2%d\n", cmp.Compare(3, 2))
 	}
 	{
 		// slices
+		fmt.Println("===========slices===========")
 		fmt.Printf("max=%d\n", slices.Max([]int{1, 2, 100, 3}))
 		fmt.Printf("max=%d\n", slices.Min([]int{1, 2, 0, 3}))
 		var (
@@ -46,6 +52,7 @@ func main() {
 	}
 	{
 		// clear
+		fmt.Println("===========clear===========")
 		slice := []int{1, 2, 3, 4, 5}
 		fmt.Printf("input=%v\n", slice)
 		clear(slice)
