@@ -64,6 +64,18 @@ func main() {
 		fmt.Printf("input=%v(changed)\n", mNaN) // NaN is duplicated
 		clear(mNaN)
 		fmt.Printf("input=%v(cleared)\n", mNaN) // clear NaN key
-
+	}
+	{
+		// strings/bytes
+		fmt.Println("===========strings/bytes===========")
+		fmt.Printf("ContainsFunc=%v\n", strings.ContainsFunc("abcd", func(r rune) bool {
+			return r == 'a'
+		}))
+		fmt.Printf("ContainsFunc=%v\n", bytes.ContainsFunc([]byte{0x00, 0x02, 0x05}, func(r rune) bool {
+			return r%2 == 1
+		}))
+		fmt.Printf("ContainsFunc=%v\n", bytes.ContainsFunc([]byte{0x00, 0x02, 0x04}, func(r rune) bool {
+			return r%2 == 1
+		}))
 	}
 }
