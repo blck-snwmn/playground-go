@@ -4,6 +4,7 @@ import (
 	"cmp"
 	"fmt"
 	"log/slog"
+	"math"
 	"os"
 	"slices"
 	"sort"
@@ -42,5 +43,27 @@ func main() {
 
 		index, ok = slices.BinarySearch(input, 11)
 		fmt.Printf("exists?`%v`, search=%v(index=%d)\n", ok, input[index], index)
+	}
+	{
+		// clear
+		slice := []int{1, 2, 3, 4, 5}
+		fmt.Printf("input=%v\n", slice)
+		clear(slice)
+		fmt.Printf("input=%v(cleared)\n", slice)
+
+		m := map[string]int{"a": 1, "b": 2}
+		fmt.Printf("input=%v\n", m)
+		clear(m)
+		fmt.Printf("input=%v(cleared)\n", m)
+
+		mNaN := map[float64]int{math.NaN(): 10, math.Inf(0): 100, math.Inf(-1): 20}
+		fmt.Printf("input=%v\n", mNaN)
+		mNaN[math.NaN()] = 12
+		mNaN[math.Inf(0)] = 13
+		mNaN[math.Inf(-1)] = 14
+		fmt.Printf("input=%v(changed)\n", mNaN) // NaN is duplicated
+		clear(mNaN)
+		fmt.Printf("input=%v(cleared)\n", mNaN) // clear NaN key
+
 	}
 }
