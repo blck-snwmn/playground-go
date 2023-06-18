@@ -1,3 +1,4 @@
+use Go1.21rc1
 ## WASI
 ### Build
 ```bash
