@@ -60,6 +60,21 @@ func main() {
 
 		index, ok = slices.BinarySearch(input, 11)
 		fmt.Printf("exists?`%v`, search=%v(index=%d)\n", ok, input[index], index)
+
+		input = []int{1, 2, 100, 3}
+		fmt.Printf("[before]sort=%v\n", input)
+		slices.Sort(input)
+		fmt.Printf("[after]sort=%v\n", input)
+		slices.Reverse(input)
+		fmt.Printf("reverse=%v\n", input)
+		input = slices.Replace(input, 1, 3, 10, 20, 30, 40, 50)
+		fmt.Printf("replace=%v\n", input) // [100 10 20 30 40 50 1]
+
+		input = slices.Insert(input, 1, 11, 12, 13)
+		fmt.Printf("insert=%v\n", input) // [100 11 12 13 10 20 30 40 50 1]
+
+		input = slices.Delete(input, 1, 5)
+		fmt.Printf("delete=%v\n", input) // [100 20 30 40 50 1]
 	}
 	{
 		// clear
