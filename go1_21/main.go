@@ -12,6 +12,7 @@ import (
 	"slices"
 	"sort"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -131,4 +132,66 @@ func main() {
 		cancel()
 		time.Sleep(time.Second)
 	}
+	{
+		// sync
+		fmt.Println("===========sync===========")
+		var defaultValue int
+		defaultValue = 10
+		ot := sync.OnceValue(func() int { return defaultValue })
+		defaultValue = 20
+		fmt.Printf("value=%v\n", ot())
+		defaultValue = 30
+		fmt.Printf("value=%v\n", ot())
+
+		ovs := sync.OnceValues(func() (int, int) {
+			return defaultValue / 2, defaultValue / 3
+		})
+		defaultValue = 40
+		l, r := ovs()
+		fmt.Printf("values=(%v, %v)\n", l, r)
+		l, r = ovs()
+		fmt.Printf("values=(%v, %v)\n", l, r)
+		defaultValue = r
+
+		of := sync.OnceFunc(func() {
+			defaultValue = defaultValue + 40
+		})
+		fmt.Printf("value=%v\n", defaultValue)
+		of()
+		fmt.Printf("value=%v\n", defaultValue)
+		of()
+		fmt.Printf("value=%v\n", defaultValue)
+	}
+	{
+		// sync.OnceValue
+		fmt.Println("===========sync.OnceValue===========")
+		ot := newot()
+		ot2 := ot
+
+		fmt.Printf("now=%v\n", time.Now())
+		fmt.Printf("time=%v\n", ot.Time())
+		time.Sleep(time.Second)
+		fmt.Printf("time=%v\n", ot2.Time())
+	}
+}
+
+// See: https://cs.opensource.google/go/go/+/refs/tags/go1.20.5:src/sync/waitgroup.go;l=24
+type noCopy struct{}
+
+var _ sync.Locker = (*noCopy)(nil)
+
+func (*noCopy) Lock()   {}
+func (*noCopy) Unlock() {}
+
+type onceTime struct {
+	noCopy noCopy
+	ot     func() time.Time
+}
+
+func newot() *onceTime {
+	return &onceTime{ot: sync.OnceValue(func() time.Time { return time.Now() })}
+}
+
+func (o *onceTime) Time() time.Time {
+	return o.ot()
 }
