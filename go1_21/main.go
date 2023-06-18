@@ -3,6 +3,8 @@ package main
 import (
 	"bytes"
 	"cmp"
+	"context"
+	"errors"
 	"fmt"
 	"log/slog"
 	"math"
@@ -10,6 +12,7 @@ import (
 	"slices"
 	"sort"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -84,5 +87,48 @@ func main() {
 		fmt.Printf("ContainsFunc=%v\n", bytes.ContainsFunc([]byte{0x00, 0x02, 0x04}, func(r rune) bool {
 			return r%2 == 1
 		}))
+	}
+	{
+		// context
+		fmt.Println("===========context===========")
+		ctx := context.Background()
+		fmt.Printf("ctx.error=%v\n", ctx.Err())
+		ctx, cancel := context.WithDeadline(ctx, time.Now().Add(time.Millisecond))
+		defer cancel()
+		<-ctx.Done()
+
+		fmt.Printf("ctx.error=%v\n", ctx.Err())
+
+		key := struct{}{}
+		ctx = context.WithValue(ctx, key, "value")
+		fmt.Printf("ctx.error=%v, value=%v\n", ctx.Err(), ctx.Value(key))
+
+		ctx, cancel = context.WithDeadlineCause(ctx, time.Now().Add(-time.Millisecond), errors.New("text string")) // ctx.error=context deadline exceeded, cause=context deadline exceeded
+		defer cancel()
+		fmt.Printf("ctx.error=%+v, cause=%+v\n", ctx.Err(), context.Cause(ctx))
+
+		ctx = context.WithoutCancel(ctx)
+		fmt.Printf("ctx.error=%v, value=%v\n", ctx.Err(), ctx.Value(key)) // ctx.error=context deadline exceeded, cause=text string
+	}
+	{
+		// context.WithDeadlineCause
+		fmt.Println("===========context.WithDeadlineCause===========")
+		ctx := context.Background()
+		ctx, cancel := context.WithDeadlineCause(ctx, time.Now().Add(-time.Millisecond), errors.New("text string"))
+		defer cancel()
+		fmt.Printf("ctx.error=%+v, cause=%+v\n", ctx.Err(), context.Cause(ctx))
+	}
+	{
+		// context.AfterFunc
+		fmt.Println("===========context.AfterFunc===========")
+		ctx := context.Background()
+		ctx, cancel := context.WithCancel(ctx)
+
+		_ = context.AfterFunc(ctx, func() {
+			fmt.Println("stop in AfterFunc callback")
+		})
+
+		cancel()
+		time.Sleep(time.Second)
 	}
 }
