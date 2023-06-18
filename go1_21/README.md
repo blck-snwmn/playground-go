@@ -1,12 +1,12 @@
 ## WASI
 ### Build
 ```bash
-GOOS=wasip1 GOARCH=wasm go build main.go 
+GOOS=wasip1 GOARCH=wasm go build -o main.wasm main.go 
 ```
 
 ### Run
 ```bash
-wasmtime main
+wasmtime main.wasm
 ```
 
 ### Convert to WAT

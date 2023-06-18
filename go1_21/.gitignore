@@ -1,2 +1,3 @@
 main
-gomain.wat
+*.wat
+*.wasm
