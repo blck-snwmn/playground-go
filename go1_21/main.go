@@ -4,8 +4,10 @@ import (
 	"bytes"
 	"cmp"
 	"context"
+	"embed"
 	"errors"
 	"fmt"
+	"io"
 	"log/slog"
 	"math"
 	"os"
@@ -15,6 +17,9 @@ import (
 	"sync"
 	"time"
 )
+
+//go:embed **.**
+var fs embed.FS
 
 func main() {
 	{
@@ -172,6 +177,25 @@ func main() {
 		fmt.Printf("time=%v\n", ot.Time())
 		time.Sleep(time.Second)
 		fmt.Printf("time=%v\n", ot2.Time())
+	}
+	{
+		// embed
+		// embed's openFile implements io.ReaderAt
+		fmt.Println("===========embed===========")
+		f, err := fs.Open("main.go")
+		if err != nil {
+			panic(err)
+		}
+		ra, ok := f.(io.ReaderAt)
+		if !ok {
+			panic("not io.ReaderAt")
+		}
+		buf := make([]byte, 10)
+		n, err := ra.ReadAt(buf, 2)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("n=%v, buf=%v\n", n, string(buf))
 	}
 }
 
