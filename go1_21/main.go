@@ -45,7 +45,9 @@ func main() {
 		// slices
 		fmt.Println("===========slices===========")
 		fmt.Printf("max=%d\n", slices.Max([]int{1, 2, 100, 3}))
+		fmt.Printf("max=%d\n", max(1, 2, 100, 3))
 		fmt.Printf("max=%d\n", slices.Min([]int{1, 2, 0, 3}))
+		fmt.Printf("max=%d\n", min(1, 2, 0, 3))
 		var (
 			index int
 			ok    bool
