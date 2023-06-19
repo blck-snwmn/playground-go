@@ -15,6 +15,7 @@ import (
 	"sort"
 	"strings"
 	"sync"
+	"testing"
 	"time"
 )
 
@@ -214,6 +215,11 @@ func main() {
 		}
 		fmt.Printf("n=%v, buf=%v\n", n, string(buf))
 	}
+	{
+		// testing
+		fmt.Println("===========testing===========")
+		fmt.Printf("isTest=%v\n", isTest())
+	}
 }
 
 // See: https://cs.opensource.google/go/go/+/refs/tags/go1.20.5:src/sync/waitgroup.go;l=24
@@ -235,4 +241,8 @@ func newot() *onceTime {
 
 func (o *onceTime) Time() time.Time {
 	return o.ot()
+}
+
+func isTest() bool {
+	return testing.Testing()
 }
