@@ -8,7 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log/slog"
+	"maps"
 	"math"
 	"os"
 	"slices"
@@ -17,24 +17,28 @@ import (
 	"sync"
 	"testing"
 	"time"
+
+	"log/slog"
 )
 
 //go:embed **.**
 var fs embed.FS
 
+func slogSample() {
+	// log/slog
+	fmt.Println("===========log/slog===========")
+	l := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{AddSource: true}))
+
+	l.Info("use json handler", slog.Bool("boolkey", true))
+	slog.Info("before SetDefault", slog.Bool("boolkey", true))
+
+	slog.SetDefault(l.With(slog.String("withkey", "withvalue")))
+
+	slog.Warn("warn")
+}
+
 func main() {
-	{
-		// log/slog
-		fmt.Println("===========log/slog===========")
-		l := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{AddSource: true}))
-
-		l.Info("use json handler", slog.Bool("boolkey", true))
-		slog.Info("before SetDefault", slog.Bool("boolkey", true))
-
-		slog.SetDefault(l.With(slog.String("withkey", "withvalue")))
-
-		slog.Warn("warn")
-	}
+	slogSample()
 	{
 		// cmp
 		fmt.Println("===========cmp===========")
@@ -76,6 +80,27 @@ func main() {
 
 		input = slices.Delete(input, 1, 5)
 		fmt.Printf("delete=%v\n", input) // [100 20 30 40 50 1]
+	}
+	{
+		// maps
+		fmt.Println("===========maps===========")
+		m := map[string]int{"a": 1, "b": 2, "c": 3}
+		mc := maps.Clone(m)
+		fmt.Printf("origin=%p, clone=%p\n", m, mc)
+		fmt.Printf("equal=%v\n", maps.Equal(m, mc))
+		m["a"] = 10
+		m["d"] = 123
+		m["e"] = 321
+		fmt.Printf("this=%v, other=%v\n", m, mc)
+		maps.Copy(mc, m)
+		fmt.Printf("this=%v, other=%v(copied)\n", m, mc)
+
+		fmt.Printf("keys=%v\n", maps.Keys(m))     // indeterminate order
+		fmt.Printf("values=%v\n", maps.Values(m)) // indeterminate order
+		maps.DeleteFunc(mc, func(key string, value int) bool {
+			return value%2 == 0
+		})
+		fmt.Printf("delete=%v\n", mc)
 	}
 	{
 		// clear
