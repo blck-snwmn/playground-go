@@ -6,4 +6,5 @@ use (
 	./go1_20
 	./go1_21
 	./slog
+	./testdir
 )
