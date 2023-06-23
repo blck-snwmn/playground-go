@@ -1,10 +1,11 @@
-go 1.21
+go 1.21rc2
 
 use (
 	./benchcmp
 	./copybyte
 	./go1_20
 	./go1_21
+	./go1_21exp
 	./slog
 	./testdir
 )
