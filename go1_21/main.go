@@ -24,21 +24,19 @@ import (
 //go:embed **.**
 var fs embed.FS
 
-func slogSample() {
-	// log/slog
-	fmt.Println("===========log/slog===========")
-	l := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{AddSource: true}))
-
-	l.Info("use json handler", slog.Bool("boolkey", true))
-	slog.Info("before SetDefault", slog.Bool("boolkey", true))
-
-	slog.SetDefault(l.With(slog.String("withkey", "withvalue")))
-
-	slog.Warn("warn")
-}
-
 func main() {
-	slogSample()
+	{
+		// log/slog
+		fmt.Println("===========log/slog===========")
+		l := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{AddSource: true}))
+
+		l.Info("use json handler", slog.Bool("boolkey", true))
+		slog.Info("before SetDefault", slog.Bool("boolkey", true))
+
+		slog.SetDefault(l.With(slog.String("withkey", "withvalue")))
+
+		slog.Warn("warn")
+	}
 	{
 		// cmp
 		fmt.Println("===========cmp===========")
