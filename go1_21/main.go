@@ -174,6 +174,7 @@ func main() {
 		_ = context.AfterFunc(ctx, func() {
 			fmt.Println("stop in AfterFunc callback")
 		})
+		fmt.Println("print txt before cancel")
 
 		cancel()
 		time.Sleep(time.Second)
