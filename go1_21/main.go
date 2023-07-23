@@ -239,6 +239,13 @@ func main() {
 		fmt.Printf("n=%v, buf=%v\n", n, string(buf))
 	}
 	{
+		in := make([]byte, 0, 100)
+		in = append(in, []byte("abc")...)
+		buf := bytes.NewBuffer(in)
+		fmt.Printf("buf.available=%v\n", buf.Available())
+		fmt.Printf("buf.availablebuf=%v\n", buf.AvailableBuffer())
+	}
+	{
 		// testing
 		fmt.Println("===========testing===========")
 		fmt.Printf("isTest=%v\n", isTest())
