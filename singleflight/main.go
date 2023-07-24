@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sync"
 	"time"
 
 	"golang.org/x/sync/singleflight"
@@ -19,13 +20,26 @@ func print(g *singleflight.Group, key, value string) {
 func main() {
 	var g singleflight.Group
 
-	// 同時実行は制限される
-	go print(&g, "key1", "a")
-	go print(&g, "key1", "b")
-	go print(&g, "key2", "c")
+	var sg sync.WaitGroup
+	sg.Add(3)
 
-	time.Sleep(time.Second * 5)
+	// 同時実行の場合は処理がまとめられる
+	go func() {
+		defer sg.Done()
+		print(&g, "key1", "a")
+	}()
+	go func() {
+		defer sg.Done()
+		print(&g, "key1", "b")
+	}()
+	go func() {
+		defer sg.Done()
+		print(&g, "key2", "c")
+	}()
 
+	sg.Wait()
+
+	fmt.Println("forget key1")
 	g.Forget("key1")
 
 	// Forget を実行すると指定したキーはリセット
@@ -33,7 +47,7 @@ func main() {
 
 	time.Sleep(time.Second * 5)
 
-	// 同期処理の場合、順次実行されるので、キャッシュされた値が変えることはない
+	// 同期処理の場合、順次実行されるので、その都度リクエストされる
 	print(&g, "key3", "31")
 	print(&g, "key3", "32")
 }
