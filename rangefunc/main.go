@@ -22,6 +22,11 @@ func main() {
 }
 
 func f(yield func(int64) bool) bool {
+	yield(51)
+	yield(51)
+	yield(51)
+	yield(51)
+	yield(51)
 	for i := range 100 {
 		i := int64(i)
 		if !yield(i) {
