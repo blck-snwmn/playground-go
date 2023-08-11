@@ -64,6 +64,32 @@ func Benchmark_zap(b *testing.B) {
 	}
 }
 
+func Benchmark_zap_last_sync(b *testing.B) {
+	uid := uuid.NewString()
+	cfg := zap.NewProductionConfig()
+	l, _ := zap.NewProduction(
+		zap.ErrorOutput(zapcore.AddSync(io.Discard)),
+		zap.WrapCore(func(core zapcore.Core) zapcore.Core {
+			return zapcore.NewCore(
+				zapcore.NewJSONEncoder(cfg.EncoderConfig),
+				zapcore.AddSync(io.Discard),
+				cfg.Level,
+			)
+		}))
+	defer l.Sync()
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		l := l.With(zap.String("user_id", uid))
+		l.Info("this is a test. this is error message",
+			zap.String("code", "aaaaaaaa"),
+			zap.String("message", "this is error message"),
+		)
+
+	}
+}
+
 func Benchmark_zap_sugar(b *testing.B) {
 	uid := uuid.NewString()
 	cfg := zap.NewProductionConfig()
@@ -89,3 +115,29 @@ func Benchmark_zap_sugar(b *testing.B) {
 		ll.Sync()
 	}
 }
+
+func Benchmark_zap_sugar_last_sync(b *testing.B) {
+	uid := uuid.NewString()
+	cfg := zap.NewProductionConfig()
+	ll, _ := zap.NewProduction(
+		zap.ErrorOutput(zapcore.AddSync(io.Discard)),
+		zap.WrapCore(func(core zapcore.Core) zapcore.Core {
+			return zapcore.NewCore(
+				zapcore.NewJSONEncoder(cfg.EncoderConfig),
+				zapcore.AddSync(io.Discard),
+				cfg.Level,
+			)
+		}))
+	l := ll.Sugar()
+	defer l.Sync()
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		l := l.With(zap.String("user_id", uid))
+		l.Info("this is a test. this is error message",
+			zap.String("code", "aaaaaaaa"),
+			zap.String("message", "this is error message"),
+		)
+	}
+}
+
