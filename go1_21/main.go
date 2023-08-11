@@ -93,8 +93,9 @@ func main() {
 		maps.Copy(mc, m)
 		fmt.Printf("this=%v, other=%v(copied)\n", m, mc)
 
-		fmt.Printf("keys=%v\n", maps.Keys(m))     // indeterminate order
-		fmt.Printf("values=%v\n", maps.Values(m)) // indeterminate order
+		// go1.21 remove maps.Keys/Values
+		// fmt.Printf("keys=%v\n", maps.Keys(m))     // indeterminate order
+		// fmt.Printf("values=%v\n", maps.Values(m)) // indeterminate order
 		maps.DeleteFunc(mc, func(key string, value int) bool {
 			return value%2 == 0
 		})
