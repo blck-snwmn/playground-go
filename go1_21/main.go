@@ -252,6 +252,17 @@ func main() {
 		fmt.Println("===========testing===========")
 		fmt.Printf("isTest=%v\n", isTest())
 	}
+	{
+		defer func() {
+			err := recover()
+			if err != nil {
+				fmt.Printf("err=`%v`\n", err) // no nil if panic(nil)
+			} else {
+				fmt.Println("no panic")
+			}
+		}()
+		panic(nil) // args is nil
+	}
 }
 
 // See: https://cs.opensource.google/go/go/+/refs/tags/go1.20.5:src/sync/waitgroup.go;l=24
