@@ -1,0 +1,4 @@
+github.com/blck-snwmn/playground-go/toolchain/mm v0.0.0-20230823134413-a793b0365902 h1:Ey+t6RsLi93oG7WnN5H/jZHl/Wp2MgSrIEPIJNgxEVs=
+github.com/blck-snwmn/playground-go/toolchain/mm v0.0.0-20230823134413-a793b0365902/go.mod h1:Td/1P7AUHILfnogk6jlBpxMKbHwykXDKLrOnS+335AM=
+github.com/blck-snwmn/playground-go/toolchain/nn v0.0.0-20230823134413-a793b0365902 h1:kxusncmjT9FWikUdLXFtq01WMGMl14qw4UyQMXkcvgI=
+github.com/blck-snwmn/playground-go/toolchain/nn v0.0.0-20230823134413-a793b0365902/go.mod h1:szh5hLonDPalLeXcWBGvv+tTVqp2L7sPzYwwf4S9rzU=
