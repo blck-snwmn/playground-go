@@ -1,9 +1,9 @@
-module github.com/blck-snwmn/playground-go/logbench
+module github.com/blck-snwmn/playground-go/bench
 
 go 1.21.0
 
 require (
-	github.com/google/uuid v1.3.0
+	github.com/google/uuid v1.3.1
 	go.uber.org/zap v1.25.0
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2
 )
