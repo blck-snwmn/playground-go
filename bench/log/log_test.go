@@ -1,4 +1,4 @@
-package logbench
+package log
 
 import (
 	"fmt"
