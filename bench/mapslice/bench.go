@@ -11,13 +11,17 @@ func main() {
 	PrintMemUsage()
 	n := 1000000
 
-	up := flag.Bool("p", false, "")
+	var up string
+	flag.StringVar(&up, "m", "p", "")
 	flag.Parse()
 
-	if *up {
+	switch up {
+	case "p":
 		doUsePointer(n)
-	} else {
+	case "s":
 		doNoPointer(n)
+	default:
+		panic("unknown")
 	}
 }
 
