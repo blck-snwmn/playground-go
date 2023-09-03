@@ -17,35 +17,30 @@ func main() {
 
 	switch up {
 	case "p":
-		doUsePointer(n)
+		do(n, func(n int) map[int]*[128]byte {
+			m := make(map[int]*[128]byte)
+			for j := 0; j < n; j++ {
+				var rb [128]byte
+				randBytes(rb[:])
+				m[j] = &rb
+			}
+			return m
+		})
 	case "s":
-		doNoPointer(n)
+		do(n, func(n int) map[int][128]byte {
+			m := make(map[int][128]byte)
+			for j := 0; j < n; j++ {
+				var rb [128]byte
+				randBytes(rb[:])
+				m[j] = rb
+			}
+			return m
+		})
 	default:
 		panic("unknown")
 	}
 }
 
-func doUsePointer(n int) {
-	do(n, func(n int) map[int]*[128]byte {
-		m := make(map[int]*[128]byte)
-		for j := 0; j < n; j++ {
-			rb := randBytes()
-			m[j] = &rb
-		}
-		return m
-	})
-}
-
-func doNoPointer(n int) {
-	do(n, func(n int) map[int][128]byte {
-		m := make(map[int][128]byte)
-		for j := 0; j < n; j++ {
-			rb := randBytes()
-			m[j] = rb
-		}
-		return m
-	})
-}
 func do[T any](n int, gen func(n int) map[int]T) {
 	m := gen(n)
 	runtime.GC()
@@ -58,10 +53,8 @@ func do[T any](n int, gen func(n int) map[int]T) {
 	runtime.KeepAlive(m)
 }
 
-func randBytes() [128]byte {
-	var b [128]byte
+func randBytes(b []byte) {
 	rand.Read(b[:])
-	return b
 }
 
 func PrintMemUsage() {
