@@ -36,6 +36,30 @@ func main() {
 			}
 			return m
 		})
+	case "big":
+		do(n, func(n int) map[int][129]byte {
+			m := make(map[int][129]byte)
+			for j := 0; j < n; j++ {
+				// size が 128 を超える場合
+				// map[int]*[128]byte と 同様の挙動をする
+				var rb [129]byte
+				randBytes(rb[:])
+				m[j] = rb
+			}
+			return m
+		})
+	case "pbig":
+		do(n, func(n int) map[int]*[129]byte {
+			m := make(map[int]*[129]byte)
+			for j := 0; j < n; j++ {
+				// size が 128 を超える場合
+				// map[int]*[128]byte と 同様の挙動をする
+				var rb [129]byte
+				randBytes(rb[:])
+				m[j] = &rb
+			}
+			return m
+		})
 	default:
 		panic("unknown")
 	}
