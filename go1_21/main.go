@@ -201,6 +201,14 @@ func main() {
 		fmt.Printf("values=(%v, %v)\n", l, r)
 		defaultValue = r
 
+		ovs2 := sync.OnceValues(func() (int, error) {
+			return defaultValue / 2, errors.New("error occurred")
+		})
+		v, err := ovs2()
+		fmt.Printf("values=(%v, %v)\n", v, err)
+		v, err = ovs2()
+		fmt.Printf("values=(%v, %v)\n", v, err)
+
 		of := sync.OnceFunc(func() {
 			defaultValue = defaultValue + 40
 		})
