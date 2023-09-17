@@ -39,10 +39,10 @@ func main() {
 
 	sg.Wait()
 
-	fmt.Println("forget key1")
-	g.Forget("key1")
+	// fmt.Println("forget key1")
+	// g.Forget("key1")
 
-	// Forget を実行すると指定したキーはリセット
+	print(&g, "key1", "zzz")
 	go print(&g, "key1", "a2")
 
 	time.Sleep(time.Second * 5)
