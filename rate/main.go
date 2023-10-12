@@ -9,18 +9,21 @@ import (
 )
 
 func main() {
-	limit := rate.NewLimiter(rate.Every(time.Second), 10)
+	now := time.Now()
+	defer func() {
+		fmt.Printf("time: %v\n", time.Since(now))
+	}()
+	// bucket: 10
+	// rate: 1/2s
+	l := rate.NewLimiter(2, 10)
 
 	ctx := context.Background()
-	prev := time.Now()
-	start := prev
-	for i := 0; i < 20; i++ {
-		if err := limit.Wait(ctx); err != nil {
-			fmt.Println(err)
-			return
+
+	for i := 0; i < 11; i++ {
+		if err := l.Wait(ctx); err != nil {
+			panic(err)
 		}
-		now := time.Now()
-		fmt.Println(i, now.Sub(prev), now.Sub(start))
-		prev = now
+
+		fmt.Printf("%d\n", i)
 	}
 }
