@@ -1,0 +1,6 @@
+linters:
+  enable:
+    - errorlint
+linters-settings:
+  errorlint:
+    errorf: true
