@@ -34,6 +34,7 @@ func main() {
 	}
 	{
 		fmt.Println("==========")
+		// The time is 8:00 but the JST time is different because of daylight saving time
 		var t time.Time
 		t = time.Date(2023, 9, 1, 8, 0, 0, 0, la)
 		fmt.Println(t)
