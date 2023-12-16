@@ -9,6 +9,9 @@ func main() {
 	location, _ := time.LoadLocation("America/Los_Angeles")
 	la := location
 
+	locationTokyo, _ := time.LoadLocation("Asia/Tokyo")
+	jst := locationTokyo
+
 	p := func(t time.Time) {
 		fmt.Printf("%v, %v, %v\n", t, t.UTC(), t.Unix())
 	}
@@ -28,5 +31,17 @@ func main() {
 
 		d = d.Add(time.Second)
 		p(d) // 2023-11-05 01:00:00 -0500 EST
+	}
+	{
+		fmt.Println("==========")
+		var t time.Time
+		t = time.Date(2023, 9, 1, 8, 0, 0, 0, la)
+		fmt.Println(t)
+		fmt.Println(t.In(jst))
+
+		fmt.Println("==========")
+		t = time.Date(2023, 12, 1, 8, 0, 0, 0, la)
+		fmt.Println(t)
+		fmt.Println(t.In(jst))
 	}
 }
