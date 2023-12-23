@@ -1,9 +1,11 @@
 package main
 
 import (
+	"cmp"
 	"encoding/hex"
 	"fmt"
 	"math/rand/v2"
+	"slices"
 	"time"
 )
 
@@ -27,4 +29,19 @@ func main() {
 	}
 	x := rand.IntN(10000)
 	fmt.Println(x)
+
+	l := []string{"a", "b", "c", "d", "e"}
+	r := []string{"f", "g", "h", "i", "j"}
+	xx := slices.Concat(l, r)
+	fmt.Println(xx)
+
+	xx = slices.Replace(xx, 2, 5, "x", "y", "z")
+	fmt.Println(xx)
+
+	{
+		fmt.Println(cmp.Or(1, 2, 3))
+		fmt.Println(cmp.Or(0, 0, 3))
+		x := 100
+		fmt.Println(*cmp.Or(nil, nil, &x))
+	}
 }
