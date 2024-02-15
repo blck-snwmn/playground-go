@@ -48,6 +48,12 @@ func main() {
 	for i := range callDefer {
 		fmt.Printf("[callDefer]: %d\n", i)
 	}
+
+	p := panicer{}
+	for i := range p.iter {
+		fmt.Printf("[panicer]: %d\n", i)
+	}
+	// p.yield(100) // panic because yield becomes nil when the loop ends
 }
 
 // rangeOverFunc is a function that return single value
@@ -115,6 +121,27 @@ func invalid(yield func(int) bool) {
 		if !yield(i) {
 			fmt.Println("break in f")
 			// return // panic
+		}
+	}
+}
+
+type panicer struct {
+	yield func(int) bool
+}
+
+func (p panicer) iter(yield func(int) bool) {
+	p.yield = yield
+	if p.yield == nil {
+		fmt.Println("yield is nil")
+	}
+	defer func() {
+		if p.yield == nil {
+			fmt.Println("yield is nil in defer")
+		}
+	}()
+	for i := range 10 {
+		if !yield(i) {
+			return
 		}
 	}
 }
