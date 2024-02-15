@@ -3,6 +3,7 @@ package main
 import (
 	"cmp"
 	"fmt"
+	"math/rand/v2"
 	"slices"
 )
 
@@ -22,6 +23,27 @@ func main() {
 	for i, v := range sortIter([]int{19, 100, 2, 7, 5, 50}) {
 		fmt.Printf("%d: %d\n", i, v)
 	}
+
+	{
+		count := 0
+		for i, v := range randRange2 {
+			fmt.Printf("[1]%d: %d\n", i, v)
+			count++
+			if count == 3 {
+				break
+			}
+		}
+	}
+	{
+		count := 0
+		for i, v := range randRange2 {
+			fmt.Printf("[2]%d: %d\n", i, v)
+			count++
+			if count == 3 {
+				break
+			}
+		}
+	}
 }
 
 func rangeOverFunc(yield func(int) bool) {
@@ -31,6 +53,14 @@ func rangeOverFunc(yield func(int) bool) {
 			//  the function must exit if yield returns false
 			fmt.Println("break in f")
 			return
+		}
+	}
+}
+
+func randRange2(yield func(int, int) bool) {
+	for {
+		if !yield(rand.Int(), rand.Int()) {
+			break
 		}
 	}
 }
