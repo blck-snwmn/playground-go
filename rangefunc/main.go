@@ -6,7 +6,7 @@ import (
 
 func main() {
 	for i := range rangeOverFunc {
-		if i == 50 {
+		if i == 5 {
 			fmt.Println("break in for loop")
 			break
 		}
@@ -15,7 +15,7 @@ func main() {
 }
 
 func rangeOverFunc(yield func(int) bool) {
-	for i := range 100 {
+	for i := range 10 {
 		fmt.Printf("[rangeOverFunc]: %d\n", i)
 		if !yield(i) {
 			//  the function must exit if yield returns false
