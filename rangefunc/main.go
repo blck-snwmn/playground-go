@@ -10,12 +10,13 @@ func main() {
 			fmt.Println("break in for loop")
 			break
 		}
-		fmt.Println(i)
+		fmt.Printf("[main]: %d\n", i)
 	}
 }
 
 func rangeOverFunc(yield func(int) bool) {
 	for i := range 100 {
+		fmt.Printf("[rangeOverFunc]: %d\n", i)
 		if !yield(i) {
 			//  the function must exit if yield returns false
 			fmt.Println("break in f")
