@@ -6,9 +6,6 @@ import (
 
 func main() {
 	for i := range rangeOverFunc {
-		if i < 40 {
-			continue
-		}
 		if i == 50 {
 			fmt.Println("break in for loop")
 			break
