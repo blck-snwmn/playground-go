@@ -44,6 +44,10 @@ func main() {
 			}
 		}
 	}
+
+	for i := range callDefer {
+		fmt.Printf("[callDefer]: %d\n", i)
+	}
 }
 
 func rangeOverFunc(yield func(int) bool) {
@@ -63,6 +67,20 @@ func randRange2(yield func(int, int) bool) {
 			break
 		}
 	}
+}
+
+func callDefer(yield func(int) bool) {
+	defer func() {
+		fmt.Println("[callDefer in iter func] deferred")
+		yield(100)
+		fmt.Println("[callDefer in iter func] deferred end")
+	}()
+	for i := range 10 {
+		if !yield(i) {
+			return
+		}
+	}
+	fmt.Println("[callDefer in iter func] end")
 }
 
 func gen(end int) func(func(int) bool) {
