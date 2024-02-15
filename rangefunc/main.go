@@ -20,6 +20,7 @@ func main() {
 func rangeOverFunc(yield func(int) bool) {
 	for i := range 100 {
 		if !yield(i) {
+			//  the function must exit if yield returns false
 			fmt.Println("break in f")
 			return
 		}
