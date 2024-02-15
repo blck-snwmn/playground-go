@@ -17,17 +17,17 @@ func main() {
 	}
 	fmt.Println("-------------------")
 	for i := range gen(3) {
-		fmt.Println(i)
+		fmt.Printf("[gen]: %d\n", i)
 	}
 
 	for i, v := range sortIter([]int{19, 100, 2, 7, 5, 50}) {
-		fmt.Printf("%d: %d\n", i, v)
+		fmt.Printf("[sort]%d: %d\n", i, v)
 	}
 
 	{
 		count := 0
 		for i, v := range randRange2 {
-			fmt.Printf("[1]%d: %d\n", i, v)
+			fmt.Printf("[rand:1]%d: %d\n", i, v)
 			count++
 			if count == 3 {
 				break
@@ -37,7 +37,7 @@ func main() {
 	{
 		count := 0
 		for i, v := range randRange2 {
-			fmt.Printf("[2]%d: %d\n", i, v)
+			fmt.Printf("[rand:2]%d: %d\n", i, v)
 			count++
 			if count == 3 {
 				break
