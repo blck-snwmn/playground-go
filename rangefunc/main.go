@@ -50,6 +50,7 @@ func main() {
 	}
 }
 
+// rangeOverFunc is a function that return single value
 func rangeOverFunc(yield func(int) bool) {
 	for i := range 10 {
 		fmt.Printf("[rangeOverFunc]: %d\n", i)
@@ -61,6 +62,7 @@ func rangeOverFunc(yield func(int) bool) {
 	}
 }
 
+// randRange2 is a function that return two values
 func randRange2(yield func(int, int) bool) {
 	for {
 		if !yield(rand.Int(), rand.Int()) {
@@ -69,6 +71,7 @@ func randRange2(yield func(int, int) bool) {
 	}
 }
 
+// callDefer is a function that has defer
 func callDefer(yield func(int) bool) {
 	defer func() {
 		fmt.Println("[callDefer in iter func] deferred")
@@ -83,6 +86,7 @@ func callDefer(yield func(int) bool) {
 	fmt.Println("[callDefer in iter func] end")
 }
 
+// gen returns a `range-over function` that generates values with arguments.
 func gen(end int) func(func(int) bool) {
 	return func(yield func(int) bool) {
 		for i := range end {
@@ -93,6 +97,7 @@ func gen(end int) func(func(int) bool) {
 	}
 }
 
+// sortIter returns a `range-over function` that sorts an array of arguments and returns their values.
 func sortIter[T cmp.Ordered](input []T) func(func(int, T) bool) {
 	slices.Sort(input)
 	return func(yield func(int, T) bool) {
@@ -104,6 +109,7 @@ func sortIter[T cmp.Ordered](input []T) func(func(int, T) bool) {
 	}
 }
 
+// invalid is a panic sample
 func invalid(yield func(int) bool) {
 	for i := range 100 {
 		if !yield(i) {
