@@ -43,5 +43,9 @@ func main() {
 		fmt.Println(cmp.Or(0, 0, 3))
 		x := 100
 		fmt.Println(*cmp.Or(nil, nil, &x))
+
+		var input *int = nil
+		output := cmp.Or(input)
+		fmt.Println(output)
 	}
 }
