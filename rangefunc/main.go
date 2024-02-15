@@ -9,7 +9,7 @@ func main() {
 		fmt.Println(i)
 	}
 	fmt.Println("----")
-	for i := range f {
+	for i := range rangeOverFunc {
 		if i < 40 {
 			continue
 		}
@@ -21,17 +21,11 @@ func main() {
 	}
 }
 
-func f(yield func(int) bool) bool {
-	yield(51)
-	yield(51)
-	yield(51)
-	yield(51)
-	yield(51)
+func rangeOverFunc(yield func(int) bool) {
 	for i := range 100 {
 		if !yield(i) {
 			fmt.Println("break in f")
-			return false // break
+			return
 		}
 	}
-	return false
 }
