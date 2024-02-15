@@ -5,10 +5,6 @@ import (
 )
 
 func main() {
-	for i := range 5 {
-		fmt.Println(i)
-	}
-	fmt.Println("----")
 	for i := range rangeOverFunc {
 		if i < 40 {
 			continue
