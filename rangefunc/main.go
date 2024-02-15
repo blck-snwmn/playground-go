@@ -12,6 +12,10 @@ func main() {
 		}
 		fmt.Printf("[main]: %d\n", i)
 	}
+	fmt.Println("-------------------")
+	for i := range gen(3) {
+		fmt.Println(i)
+	}
 }
 
 func rangeOverFunc(yield func(int) bool) {
@@ -21,6 +25,15 @@ func rangeOverFunc(yield func(int) bool) {
 			//  the function must exit if yield returns false
 			fmt.Println("break in f")
 			return
+		}
+	}
+}
+func gen(end int) func(func(int) bool) {
+	return func(yield func(int) bool) {
+		for i := range end {
+			if !yield(i) {
+				return
+			}
 		}
 	}
 }
