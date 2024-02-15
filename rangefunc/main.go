@@ -26,3 +26,12 @@ func rangeOverFunc(yield func(int) bool) {
 		}
 	}
 }
+
+func invalid(yield func(int) bool) {
+	for i := range 100 {
+		if !yield(i) {
+			fmt.Println("break in f")
+			// return // panic
+		}
+	}
+}
