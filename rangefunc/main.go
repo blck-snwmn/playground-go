@@ -28,6 +28,7 @@ func rangeOverFunc(yield func(int) bool) {
 		}
 	}
 }
+
 func gen(end int) func(func(int) bool) {
 	return func(yield func(int) bool) {
 		for i := range end {
