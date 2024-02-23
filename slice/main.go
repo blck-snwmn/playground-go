@@ -25,11 +25,14 @@ func main() {
 	fmt.Printf("data2: %X\n", data2)
 	fmt.Printf("data3: %X\n", data3)
 	{
+		fmt.Println("=====")
 		s := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
 		oldlen := len(s)
-		fmt.Println(s)
+		fmt.Printf("%[1]p: %[1]v\n", s)
+		fmt.Printf("cap=%d, %d\n", cap(s), cap(s[:2]))
 		s = append(s[:2], s[4:]...)
-		fmt.Println(s)
-		fmt.Println(s[len(s):oldlen]) // show deleted elements
+		fmt.Printf("%[1]p: %[1]v\n", s)
+		fmt.Printf("%[1]p: %[1]v\n", s[len(s):oldlen]) // show deleted elements
+		fmt.Printf("cap=%d, %d, %d, %d\n", cap(s), cap(s[:2]), cap(s[4:]), cap(s[len(s):oldlen]))
 	}
 }
