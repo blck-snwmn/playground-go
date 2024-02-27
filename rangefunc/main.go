@@ -3,6 +3,7 @@ package main
 import (
 	"cmp"
 	"fmt"
+	"iter"
 	"math/rand/v2"
 	"slices"
 )
@@ -93,7 +94,7 @@ func callDefer(yield func(int) bool) {
 }
 
 // gen returns a `range-over function` that generates values with arguments.
-func gen(end int) func(func(int) bool) {
+func gen(end int) iter.Seq[int] {
 	return func(yield func(int) bool) {
 		for i := range end {
 			if !yield(i) {
@@ -104,7 +105,7 @@ func gen(end int) func(func(int) bool) {
 }
 
 // sortIter returns a `range-over function` that sorts an array of arguments and returns their values.
-func sortIter[T cmp.Ordered](input []T) func(func(int, T) bool) {
+func sortIter[T cmp.Ordered](input []T) iter.Seq2[int, T] {
 	slices.Sort(input)
 	return func(yield func(int, T) bool) {
 		for i, v := range input {
