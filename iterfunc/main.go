@@ -26,6 +26,11 @@ func main() {
 		fmt.Printf("[skip]%d\n", i)
 	}
 
+	fmt.Println("======= concat =======")
+	for i := range concat(gen(100), seqFromSlice([]string{"x", "y", "z", "xx", "yy", "zz"})) {
+		fmt.Printf("[concat]: %#v\n", i)
+	}
+
 	fmt.Println("======= anyf =======")
 	fmt.Printf("[anyf]: %v\n", anyf(gen(10), func(x int) bool { return x > 4 }))
 
@@ -54,6 +59,35 @@ func filter[T any](seq iter.Seq[T], f func(T) bool) iter.Seq[T] {
 			}
 			return true
 		})
+	}
+}
+
+type concated[L, R any] struct {
+	left  L
+	right R
+}
+
+func concat[L, R any](lseq iter.Seq[L], rseq iter.Seq[R]) iter.Seq[concated[L, R]] {
+	return func(yield func(concated[L, R]) bool) {
+		lv, lstop := iter.Pull(lseq)
+		defer lstop()
+
+		rv, rstop := iter.Pull(rseq)
+		defer rstop()
+
+		for {
+			l, lmore := lv()
+			r, rmore := rv()
+
+			if !lmore || !rmore {
+				// if either of the sequence is done, then we are done
+				return
+			}
+
+			if !yield(concated[L, R]{l, r}) {
+				return
+			}
+		}
 	}
 }
 
