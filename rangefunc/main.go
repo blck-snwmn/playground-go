@@ -55,6 +55,32 @@ func main() {
 		fmt.Printf("[panicer]: %d\n", i)
 	}
 	// p.yield(100) // panic because yield becomes nil when the loop ends
+
+	{
+		fmt.Println("======= iter.Pull =======")
+		next, _ := iter.Pull(rangeOverFunc)
+		fmt.Println(next())
+		fmt.Println(next())
+		fmt.Println(next())
+		fmt.Println(next())
+		fmt.Println(next())
+		fmt.Println(next())
+		fmt.Println(next())
+		fmt.Println(next())
+		fmt.Println(next())
+		fmt.Println(next()) // last
+		fmt.Println(next())
+	}
+	{
+		fmt.Println("======= iter.Pull =======")
+		next, stop := iter.Pull(rangeOverFunc)
+		fmt.Println(next())
+		fmt.Println(next())
+		fmt.Println(next())
+		stop()
+		fmt.Println(next())
+		fmt.Println(next())
+	}
 }
 
 // rangeOverFunc is a function that return single value
