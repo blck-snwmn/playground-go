@@ -111,3 +111,13 @@ func gen(end int) iter.Seq[int] {
 		}
 	}
 }
+
+func seqFromSlice[T any](input []T) iter.Seq[T] {
+	return func(yield func(T) bool) {
+		for _, v := range input {
+			if !yield(v) {
+				return
+			}
+		}
+	}
+}
