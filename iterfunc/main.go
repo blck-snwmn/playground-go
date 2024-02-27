@@ -39,6 +39,11 @@ func mapf[T, S any](seq iter.Seq[T], f func(T) S) iter.Seq[S] {
 			return yield(f(v))
 		})
 	}
+	// return func(yield func(S) bool) {
+	// 	for v := range seq {
+	// 		yield(f(v))
+	// 	}
+	// }
 }
 
 func filter[T any](seq iter.Seq[T], f func(T) bool) iter.Seq[T] {
