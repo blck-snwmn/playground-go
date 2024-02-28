@@ -30,6 +30,19 @@ func main() {
 		fmt.Printf("[flatMap]: %c\n", i)
 	}
 
+	fmt.Println("======= filterMap =======")
+	for i := range filterMap(
+		seqFromSlice([]string{"hello", "", "world", "", "!", "!!"}),
+		func(s string) option[string] {
+			if len(s) < 2 {
+				return option[string]{ok: false}
+			}
+			return option[string]{s, true}
+		},
+	) {
+		fmt.Printf("[filterMap]: %s\n", i)
+	}
+
 	fmt.Println("======= take =======")
 	for i := range take(gen(10), 3) {
 		fmt.Printf("[take]: %d\n", i)
@@ -85,6 +98,23 @@ func flatMap[T, S any](seq iter.Seq[T], f func(T) iter.Seq[S]) iter.Seq[S] {
 				}
 			}
 		}
+	}
+}
+
+type option[T any] struct {
+	value T
+	ok    bool
+}
+
+func filterMap[T, S any](seq iter.Seq[T], f func(T) option[S]) iter.Seq[S] {
+	return func(yield func(S) bool) {
+		seq(func(v T) bool {
+			opt := f(v)
+			if opt.ok {
+				return yield(opt.value)
+			}
+			return true
+		})
 	}
 }
 
