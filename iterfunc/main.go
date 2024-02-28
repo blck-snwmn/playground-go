@@ -16,6 +16,20 @@ func main() {
 		fmt.Printf("[filter]: %d\n", i)
 	}
 
+	fmt.Println("======= flatMap =======")
+	for i := range flatMap(
+		seqFromSlice([]string{"hello", "world", "!"}),
+		func(s string) iter.Seq[rune] {
+			return func(yield func(rune) bool) {
+				for _, r := range []rune(s) {
+					yield(r)
+				}
+			}
+		},
+	) {
+		fmt.Printf("[flatMap]: %c\n", i)
+	}
+
 	fmt.Println("======= take =======")
 	for i := range take(gen(10), 3) {
 		fmt.Printf("[take]: %d\n", i)
@@ -49,6 +63,18 @@ func mapf[T, S any](seq iter.Seq[T], f func(T) S) iter.Seq[S] {
 	// 		yield(f(v))
 	// 	}
 	// }
+}
+
+func flatMap[T, S any](seq iter.Seq[T], f func(T) iter.Seq[S]) iter.Seq[S] {
+	return func(yield func(S) bool) {
+		for vs := range mapf(seq, f) {
+			for v := range vs {
+				if !yield(v) {
+					return
+				}
+			}
+		}
+	}
 }
 
 func filter[T any](seq iter.Seq[T], f func(T) bool) iter.Seq[T] {
