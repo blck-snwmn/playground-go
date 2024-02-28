@@ -43,6 +43,18 @@ func main() {
 		fmt.Printf("[filterMap]: %s\n", i)
 	}
 
+	fmt.Println("======= findMap =======")
+	v, ok := findMap(
+		seqFromSlice([]string{"hello", "world", "!"}),
+		func(s string) (string, error) {
+			if s == "world" {
+				return s, nil
+			}
+			return "", fmt.Errorf("not found")
+		},
+	)
+	fmt.Printf("[findMap]: %s, %v\n", v, ok)
+
 	fmt.Println("======= take =======")
 	for i := range take(gen(10), 3) {
 		fmt.Printf("[take]: %d\n", i)
@@ -116,6 +128,17 @@ func filterMap[T, S any](seq iter.Seq[T], f func(T) option[S]) iter.Seq[S] {
 			return true
 		})
 	}
+}
+
+func findMap[T, S any](seq iter.Seq[T], f func(T) (S, error)) (S, bool) {
+	for i := range seq {
+		v, err := f(i)
+		if err == nil {
+			return v, true
+		}
+	}
+	var s S
+	return s, false
 }
 
 type concated[L, R any] struct {
