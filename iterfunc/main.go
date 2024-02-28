@@ -8,22 +8,22 @@ import (
 func main() {
 	fmt.Println("======= mapf =======")
 	for i := range mapf(gen(3), func(x int) int { return x * 2 }) {
-		fmt.Printf("[map]%d\n", i)
+		fmt.Printf("[map]: %d\n", i)
 	}
 
 	fmt.Println("======= filter =======")
 	for i := range filter(gen(10), func(x int) bool { return x%2 == 0 }) {
-		fmt.Printf("[filter]%d\n", i)
+		fmt.Printf("[filter]: %d\n", i)
 	}
 
 	fmt.Println("======= take =======")
 	for i := range take(gen(10), 3) {
-		fmt.Printf("[take]%d\n", i)
+		fmt.Printf("[take]: %d\n", i)
 	}
 
 	fmt.Println("======= skip =======")
 	for i := range skip(gen(10), 3) {
-		fmt.Printf("[skip]%d\n", i)
+		fmt.Printf("[skip]: %d\n", i)
 	}
 
 	fmt.Println("======= concat =======")
