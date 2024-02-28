@@ -65,6 +65,17 @@ func mapf[T, S any](seq iter.Seq[T], f func(T) S) iter.Seq[S] {
 	// }
 }
 
+func filter[T any](seq iter.Seq[T], f func(T) bool) iter.Seq[T] {
+	return func(yield func(T) bool) {
+		seq(func(v T) bool {
+			if f(v) {
+				return yield(v)
+			}
+			return true
+		})
+	}
+}
+
 func flatMap[T, S any](seq iter.Seq[T], f func(T) iter.Seq[S]) iter.Seq[S] {
 	return func(yield func(S) bool) {
 		for vs := range mapf(seq, f) {
@@ -74,17 +85,6 @@ func flatMap[T, S any](seq iter.Seq[T], f func(T) iter.Seq[S]) iter.Seq[S] {
 				}
 			}
 		}
-	}
-}
-
-func filter[T any](seq iter.Seq[T], f func(T) bool) iter.Seq[T] {
-	return func(yield func(T) bool) {
-		seq(func(v T) bool {
-			if f(v) {
-				return yield(v)
-			}
-			return true
-		})
 	}
 }
 
