@@ -35,4 +35,31 @@ func main() {
 		fmt.Printf("%[1]p: %[1]v\n", s[len(s):oldlen]) // show deleted elements
 		fmt.Printf("cap=%d, %d, %d, %d\n", cap(s), cap(s[:2]), cap(s[4:]), cap(s[len(s):oldlen]))
 	}
+	{
+		fmt.Println("=====")
+		var x []greeter = []greeter{
+			english{},
+			japanese{},
+		}
+
+		for _, v := range x {
+			v.greet()
+		}
+	}
+}
+
+type greeter interface {
+	greet()
+}
+
+type english struct{}
+
+func (e english) greet() {
+	fmt.Println("Good morning!")
+}
+
+type japanese struct{}
+
+func (j japanese) greet() {
+	fmt.Println("おはようございます！")
 }
