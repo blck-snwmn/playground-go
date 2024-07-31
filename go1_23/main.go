@@ -42,7 +42,16 @@ func slicesSample() {
 	}
 
 	fmt.Println("======= slices.Collect =======")
-	fmt.Println(slices.Collect(slices.Chunk([]int{1, 2, 3, 4, 5, 6, 7, 8, 9}, 3)))
+	fmt.Println(slices.Collect(concat(
+		func(yield func(string) bool) {
+			yield("i have")
+			yield("i am")
+		},
+		func(yield func(string) bool) {
+			yield("a dream")
+			yield("good")
+		},
+	)))
 }
 
 func mapSample() {
