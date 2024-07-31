@@ -4,12 +4,26 @@ import (
 	"fmt"
 	"maps"
 	"slices"
+	"unique"
 )
 
 func main() {
 	iterSample()
 	slicesSample()
 	mapSample()
+
+	fmt.Println("======= unique =======")
+	genUnique(1)
+	genUnique(2)
+	genUnique(1)
+	genUnique("hello")
+	genUnique("world")
+	genUnique("hello")
+}
+
+func genUnique[T comparable](v T) {
+	x := unique.Make(v)
+	fmt.Println(x, x.Value())
 }
 
 func slicesSample() {
