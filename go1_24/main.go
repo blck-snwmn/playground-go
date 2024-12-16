@@ -3,6 +3,8 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"io"
+	"os"
 	"strings"
 )
 
@@ -43,4 +45,25 @@ func main() {
 	}) {
 		fmt.Printf("%d: %s\n", i, string(bs))
 	}
+	r, err := os.OpenRoot(".")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer r.Close()
+	f, err := r.Open("exp/main_test.go")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer f.Close()
+	bs, err := io.ReadAll(f)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("```go\n%s```\n", string(bs))
+
+	_, err = r.Open("../README.md")
+	fmt.Println(err)
 }
