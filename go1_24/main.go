@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"log/slog"
 	"os"
 	"strings"
 	"time"
@@ -85,4 +86,10 @@ func main() {
 		return
 	}
 	fmt.Println(txt)
+
+	sl := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	sl.Info("info")
+
+	sl = slog.New(slog.DiscardHandler)
+	sl.Info("info") //discard
 }
