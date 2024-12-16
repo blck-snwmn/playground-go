@@ -1,7 +1,12 @@
 {
     "gopls": {
         "build.env": {
-            "GOEXPERIMENT": "rangefunc"
+            "GOEXPERIMENT": "synctest"
         }
-    }
+    },
+    "go.testEnvVars": {
+        "GOEXPERIMENT": "synctest"
+    },
+    "go.testFlags": [
+    ]
 }
