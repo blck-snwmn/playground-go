@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -45,6 +46,7 @@ func main() {
 	}) {
 		fmt.Printf("%d: %s\n", i, string(bs))
 	}
+	// Root
 	r, err := os.OpenRoot(".")
 	if err != nil {
 		fmt.Println(err)
@@ -66,4 +68,21 @@ func main() {
 
 	_, err = r.Open("../README.md")
 	fmt.Println(err)
+
+	//
+	now := time.Now()
+	fmt.Println(now)
+	txt, err := now.AppendText([]byte("time: "))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(txt)
+
+	txt, err = now.AppendBinary([]byte("time: "))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(txt)
 }
