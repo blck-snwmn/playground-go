@@ -10,7 +10,21 @@ import (
 	"time"
 )
 
+// generics type alias
+type F[T any] = func(t T, s string)
+
+var ft F[string] = func(t string, s string) {
+	fmt.Println(t, s)
+}
+
+func do[T any](f F[T], t T, s string) {
+	f(t, s)
+}
+
 func main() {
+	ft("hello", "world")
+	do(ft, "xxxx", "yyyyy")
+
 	// strings
 	for s := range strings.Lines("abc\ndef\nghi\n") {
 		fmt.Print(s)
