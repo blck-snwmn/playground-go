@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log/slog"
@@ -19,6 +20,18 @@ var ft F[string] = func(t string, s string) {
 
 func do[T any](f F[T], t T, s string) {
 	f(t, s)
+}
+
+type inner struct {
+	A int    `json:"a,omitempty"`
+	B string `json:"b,omitempty"`
+}
+
+type outer struct {
+	IEmpty    inner     `json:"iempty,omitempty"`
+	IZero     inner     `json:"izero,omitzero"`
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	UpdateAt  time.Time `json:"updated_at,omitzero"`
 }
 
 func main() {
@@ -106,4 +119,12 @@ func main() {
 
 	sl = slog.New(slog.DiscardHandler)
 	sl.Info("info") //discard
+
+	o := outer{}
+	b, err := json.Marshal(o)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(string(b)) // {"iempty":{},"created_at":"0001-01-01T00:00:00Z"}
 }
