@@ -22,16 +22,23 @@ func do[T any](f F[T], t T, s string) {
 	f(t, s)
 }
 
-type inner struct {
+type innerWithOmitempty struct {
 	A int    `json:"a,omitempty"`
 	B string `json:"b,omitempty"`
 }
 
+type inner struct {
+	A int    `json:"a"`
+	B string `json:"b"`
+}
+
 type outer struct {
-	IEmpty    inner     `json:"iempty,omitempty"`
-	IZero     inner     `json:"izero,omitzero"`
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	UpdateAt  time.Time `json:"updated_at,omitzero"`
+	IWOEmpty  innerWithOmitempty `json:"iwoempty,omitempty"`
+	IWOZero   innerWithOmitempty `json:"iwozero,omitzero"`
+	IEmpty    inner              `json:"iempty,omitempty"`
+	IZero     inner              `json:"izero,omitzero"`
+	CreatedAt time.Time          `json:"created_at,omitempty"`
+	UpdateAt  time.Time          `json:"updated_at,omitzero"`
 }
 
 func main() {
@@ -126,5 +133,5 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(string(b)) // {"iempty":{},"created_at":"0001-01-01T00:00:00Z"}
+	fmt.Println(string(b))
 }
