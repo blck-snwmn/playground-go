@@ -25,10 +25,25 @@ func main() {
 
 	fmt.Println("----")
 	showReflectW(f)
+	// Type: main.foo
+	// type: main.foo
+	// Final Type: main.foo
+
 	fmt.Println("----")
 	showReflectW(&f)
+	// Type: *main.foo
+	// type: *main.foo in pointer
+	// type: main.foo
+	// Final Type: main.foo
+
 	fmt.Println("----")
 	showReflectWP(f)
+	// Type: *interface {}
+	// type: *interface {} in pointer
+	// type: interface {}
+	// type: interface {} in interface1
+	// type: interface {} in interface2
+	// Final Type: main.foo
 }
 
 func do1(a any) {
