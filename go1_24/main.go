@@ -11,8 +11,10 @@ import (
 	"time"
 )
 
+type Func[T, S any] = func(t T, s S)
+
 // generics type alias
-type F[T any] = func(t T, s string)
+type F[T any] = Func[T, string]
 
 var ft F[string] = func(t string, s string) {
 	fmt.Println(t, s)
