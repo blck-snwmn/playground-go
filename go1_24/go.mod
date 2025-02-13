@@ -1,6 +1,6 @@
 module github.com/blck-snwmn/playground-go/go1_24/go1_24
 
-go 1.24rc2
+go 1.24.0
 
 tool github.com/golangci/golangci-lint/cmd/golangci-lint
 
