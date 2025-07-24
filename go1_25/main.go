@@ -33,8 +33,27 @@ func main() {
 		m := map[string]string{
 			"key1": "value1",
 			"key2": "value2",
+			"key3": "value3",
+			"key4": "value4",
 		}
+
 		b, err := json.Marshal(m)
+		if err != nil {
+			fmt.Println("Error marshaling JSON:", err)
+			return
+		}
+		fmt.Println("JSON output:", string(b))
+	}
+	{
+		m := map[string]string{
+			"key1": "value1",
+			"key2": "value2",
+			"key3": "value3",
+			"key4": "value4",
+		}
+
+		// NOTE: Keys are not alphabetized even when using jsonv2.Deterministic
+		b, err := json.Marshal(m, json.Deterministic(true))
 		if err != nil {
 			fmt.Println("Error marshaling JSON:", err)
 			return
