@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json/v2"
 	"fmt"
 	"sync"
 	"time"
@@ -26,5 +27,18 @@ func main() {
 		if since >= 3*time.Second {
 			fmt.Println("Total execution time:", since)
 		}
+	}
+
+	{
+		m := map[string]string{
+			"key1": "value1",
+			"key2": "value2",
+		}
+		b, err := json.Marshal(m)
+		if err != nil {
+			fmt.Println("Error marshaling JSON:", err)
+			return
+		}
+		fmt.Println("JSON output:", string(b))
 	}
 }
