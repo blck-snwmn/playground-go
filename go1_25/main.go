@@ -95,4 +95,68 @@ func main() {
 
 		fmt.Printf("JSON output: %s\n", out.String())
 	}
+	sampleJsonV2Deterministic()
+}
+
+func sampleJsonV2Deterministic() {
+	fmt.Println("Sample JSON v2 deterministic output:")
+	{
+		fmt.Println("Deterministic JSON output with string keys:")
+		m := map[string]string{
+			"key1": "value1",
+			"key2": "value2",
+			"key3": "value3",
+		}
+		b, err := json.Marshal(m, json.Deterministic(true))
+		if err != nil {
+			fmt.Println("Error marshaling JSON:", err)
+			return
+		}
+		fmt.Println("\tJSON output:", string(b))
+	}
+	{
+		fmt.Println("Deterministic JSON output with integer keys:")
+		m := map[int]string{
+			1: "value1",
+			2: "value2",
+			3: "value3",
+		}
+		b, err := json.Marshal(m, json.Deterministic(true))
+		if err != nil {
+			fmt.Println("Error marshaling JSON:", err)
+			return
+		}
+		fmt.Println("\tJSON output:", string(b))
+	}
+	{
+		fmt.Println("Deterministic JSON output with struct keys:")
+
+		m := map[x]string{
+			{"s1", 1}: "value1",
+			{"s2", 2}: "value2",
+			{"s3", 3}: "value3",
+		}
+		b, err := json.Marshal(m, json.Deterministic(true))
+		if err != nil {
+			fmt.Println("Error marshaling JSON:", err)
+			return
+		}
+		fmt.Println("\tJSON output:", string(b))
+	}
+}
+
+type x struct {
+	S string `json:"s"`
+	I int    `json:"i"`
+}
+
+// MarshalJSON implements json.Marshaler interface.
+// This is required when using struct as a map key because:
+// 1. JSON spec requires object keys to be strings
+// 2. Without this, marshaling struct produces JSON object like {"s":"s1","i":1}
+// 3. This would result in invalid JSON: {{"s":"s1","i":1}: "value1"}
+// 4. By implementing MarshalJSON, we convert struct to a string representation
+func (x x) MarshalJSON() ([]byte, error) {
+	s := fmt.Sprintf(`"%s-%d"`, x.S, x.I)
+	return []byte(s), nil
 }
