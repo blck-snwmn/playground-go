@@ -1,12 +1,11 @@
 {
     "gopls": {
         "build.env": {
-            "GOEXPERIMENT": "synctest"
+            "GOEXPERIMENT": "synctest,jsonv2"
         }
     },
     "go.testEnvVars": {
-        "GOEXPERIMENT": "synctest"
+        "GOEXPERIMENT": "synctest,jsonv2"
     },
-    "go.testFlags": [
-    ]
+    "go.testFlags": []
 }
