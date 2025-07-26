@@ -5,8 +5,10 @@ import (
 	"encoding/json/jsontext"
 	"encoding/json/v2"
 	"fmt"
+	"io"
 	"maps"
 	"slices"
+	"strings"
 	"sync"
 	"time"
 )
@@ -96,6 +98,7 @@ func main() {
 		fmt.Printf("JSON output: %s\n", out.String())
 	}
 	sampleJsonV2Deterministic()
+	sampleJsonV2Read()
 }
 
 func sampleJsonV2Deterministic() {
@@ -159,4 +162,85 @@ type x struct {
 func (x x) MarshalJSON() ([]byte, error) {
 	s := fmt.Sprintf(`"%s-%d"`, x.S, x.I)
 	return []byte(s), nil
+}
+
+func sampleJsonV2Read() {
+	type item struct {
+		Field1 string `json:"field1"`
+		Field2 int    `json:"field2"`
+	}
+
+	{
+		fmt.Println("\nReading JSON with jsontext decoder:")
+
+		data := `[{"field1":"value0","field2":0},{"field1":"value1","field2":10}, {"field1":"value2","field2":20}, {"field1":"value3","field2":30}, {"field1":"value4","field2":40}]`
+		fmt.Printf("Reading JSON: %s\n", data)
+		decoder := jsontext.NewDecoder(strings.NewReader(data))
+		t, err := decoder.ReadToken()
+		if err != nil {
+			fmt.Println("Error reading token:", err)
+			return
+		}
+		if t.Kind() != '[' {
+			fmt.Println("Expected BeginArray token, got:", t)
+			return
+		}
+		for decoder.PeekKind() != 0 {
+			if decoder.PeekKind() == ']' {
+				break
+			}
+
+			var itm item
+			err := json.UnmarshalDecode(decoder, &itm)
+			if err != nil {
+				fmt.Println("Error unmarshaling item:", err)
+				return
+			}
+			fmt.Printf("Item: %+v\n", itm)
+		}
+	}
+	{
+		fmt.Println("\nReading JSON with jsontext decoder from multiple lines:")
+
+		data := `{"field1": "value1", "field2": 10}
+		{"field1": "value2", "field2": 20}
+		{"field1": "value3", "field2": 30}
+		{"field1": "value4", "field2": 40}`
+
+		fmt.Printf("Reading JSON: %s\n", data)
+
+		decoder := jsontext.NewDecoder(strings.NewReader(data))
+
+		for {
+			var itm item
+			err := json.UnmarshalDecode(decoder, &itm)
+			if err != nil {
+				if err == io.EOF {
+					fmt.Println("End of input reached")
+					break
+				}
+
+				fmt.Println("Error unmarshaling item:", err)
+			}
+			fmt.Printf("Item: %+v\n", itm)
+		}
+	}
+	{
+		fmt.Println("\nReading JSON with jsontext decoder each token:")
+		data := `{"field1": "value1", "field2": 10}`
+		fmt.Printf("Reading JSON: %s\n", data)
+		decoder := jsontext.NewDecoder(strings.NewReader(data))
+		for {
+			token, err := decoder.ReadToken()
+			if err != nil {
+				if err == io.EOF {
+					fmt.Println("End of input reached")
+					break
+				}
+				fmt.Println("Error reading token:", err)
+				break
+			}
+			fmt.Printf("\tKind:%-6s Token:%+v\n", token.Kind(), token)
+		}
+	}
 }
