@@ -99,6 +99,7 @@ func main() {
 	}
 	sampleJsonV2Deterministic()
 	sampleJsonV2Read()
+	sampleJsonV2Trasnfrom()
 }
 
 func sampleJsonV2Deterministic() {
@@ -243,4 +244,87 @@ func sampleJsonV2Read() {
 			fmt.Printf("\tKind:%-6s Token:%+v\n", token.Kind(), token)
 		}
 	}
+}
+
+func sampleJsonV2Trasnfrom() {
+	type user struct {
+		ID      int    `json:"id"`
+		Name    string `json:"name"`
+		Age     int    `json:"age"`
+		Address struct {
+			City string `json:"city"`
+			Zip  string `json:"zip"`
+		} `json:"address"`
+	}
+	data := `[
+	{"id": 1, "name": "alice", "age": 30, "address": {"city": "Wonderland", "zip": "12345"}},
+	{"id": 2, "name": "bob", "age": 25, "address": {"city": "Builderland", "zip": "67890"}},
+	{"id": 3, "name": "charlie", "age": 35, "address": {"city": "Chocolate Factory", "zip": "54321"}}
+	]`
+
+	decoder := jsontext.NewDecoder(strings.NewReader(data))
+
+	out := new(bytes.Buffer)
+	enc := jsontext.NewEncoder(out)
+
+	for {
+		fmt.Println("Reading next token...")
+		pt := decoder.PeekKind()
+		switch pt {
+		case 0:
+			// EndOfInput
+			fmt.Println("End of input reached")
+			break
+		case '[':
+			// BeginArray
+			err := enc.WriteToken(jsontext.BeginArray)
+			if err != nil {
+				fmt.Println("Error writing begin array:", err)
+				break
+			}
+			fmt.Println("BeginArray token found, starting to read array elements...")
+			decoder.ReadToken() // Consume the BeginArray token
+			continue
+		case ']':
+			// EndArray
+			err := enc.WriteToken(jsontext.EndArray)
+			if err != nil {
+				fmt.Println("Error writing end array:", err)
+				break
+			}
+			fmt.Println("EndArray token found, finishing reading array elements...")
+			decoder.ReadToken() // Consume the EndArray token
+			break
+		}
+		var u user
+		err := json.UnmarshalDecode(decoder, &u)
+		if err != nil {
+			if err == io.EOF {
+				fmt.Println("End of input reached")
+				break
+			}
+			fmt.Println("Error unmarshaling user:", err)
+			break
+		}
+		fmt.Printf("User: %+v\n", u)
+
+		maskedUser := user{
+			ID:   u.ID,
+			Name: u.Name,
+			Age:  u.Age,
+			Address: struct {
+				City string `json:"city"`
+				Zip  string `json:"zip"`
+			}{
+				City: "REDACTED",
+				Zip:  "REDACTED",
+			},
+		}
+		err = json.MarshalEncode(enc, maskedUser)
+		if err != nil {
+			fmt.Println("Error marshaling masked user:", err)
+			break
+		}
+	}
+	fmt.Println("Masked JSON output:", out.String())
 }
