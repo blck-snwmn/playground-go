@@ -99,7 +99,7 @@ func main() {
 	}
 	sampleJsonV2Deterministic()
 	sampleJsonV2Read()
-	sampleJsonV2Trasnfrom()
+	sampleJsonV2Transform()
 }
 
 func sampleJsonV2Deterministic() {
@@ -246,7 +246,7 @@ func sampleJsonV2Read() {
 	}
 }
 
-func sampleJsonV2Trasnfrom() {
+func sampleJsonV2Transform() {
 	type user struct {
 		ID      int    `json:"id"`
 		Name    string `json:"name"`
