@@ -114,6 +114,9 @@ func main() {
 			slog.Int("status", 200),
 		),
 	)
+
+	// panicSample causes the panic
+	panicSample()
 }
 
 func sampleJsonV2Deterministic() {
@@ -341,4 +344,14 @@ func sampleJsonV2Transform() {
 		}
 	}
 	fmt.Println("Masked JSON output:", out.String())
+}
+
+func panicSample() {
+	defer func() {
+		if r := recover(); r != nil {
+			panic(r)
+		}
+	}()
+
+	panic("This is a sample panic")
 }
