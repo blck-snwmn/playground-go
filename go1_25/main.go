@@ -2,11 +2,14 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json/jsontext"
 	"encoding/json/v2"
 	"fmt"
 	"io"
+	"log/slog"
 	"maps"
+	"os"
 	"slices"
 	"strings"
 	"sync"
@@ -100,6 +103,17 @@ func main() {
 	sampleJsonV2Deterministic()
 	sampleJsonV2Read()
 	sampleJsonV2Transform()
+
+	l := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	l.LogAttrs(
+		context.Background(),
+		slog.LevelInfo,
+		"Sample log message",
+		slog.GroupAttrs("req", slog.String("method", "GET"),
+			slog.String("url", "https://example.com"),
+			slog.Int("status", 200),
+		),
+	)
 }
 
 func sampleJsonV2Deterministic() {
