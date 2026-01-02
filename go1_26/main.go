@@ -4,6 +4,9 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"log/slog"
+	"os"
+	"runtime/secret"
 )
 
 type MyError int
@@ -81,4 +84,16 @@ func main() {
 	} else {
 		fmt.Println("Read from buffer:", l)
 	}
+	fmt.Println("======================= slog.NewMultiHandler =======================")
+	h1 := slog.NewJSONHandler(os.Stdout, nil)
+	h2 := slog.NewTextHandler(os.Stdout, nil)
+	mh := slog.NewMultiHandler(h1, h2)
+	logger := slog.New(mh)
+	logger.Info("This is a test log message", "key1", "value1", "key2", 42)
+
+	fmt.Println("======================= runtime/secret =======================")
+	// supported on linux/amd64, linux/arm64 only.
+	secret.Do(func() {
+		fmt.Println("Inside secret.Do")
+	})
 }
